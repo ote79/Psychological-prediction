@@ -1,0 +1,14 @@
+/*
+!/.gitignore
+!/README.md
+!/workbench-preview/
+!/观微工作台_3D全景版_2026-11-16.zip
+
+/workbench-preview/screenshots/*
+!/workbench-preview/screenshots/world-*.jpg
+/workbench-preview/node_modules/
+/workbench-preview/.cache/
+/workbench-preview/*.log
+
+**/.DS_Store
+**/Thumbs.db

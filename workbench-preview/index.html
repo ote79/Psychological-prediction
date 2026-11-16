@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="基于 CES 离线研究结果的心理状态辅助筛查工作台预览。">
+  <title>全景首页 · 观微</title>
+  <link rel="stylesheet" href="ui.css">
+  <script defer src="data.js"></script>
+  <script defer src="three-runtime.js"></script>
+  <script defer src="scene3d.js"></script>
+  <script defer src="visuals.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳过导航</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">观</div>
+        <div><div class="brand-title">观微</div><div class="brand-subtitle">心理状态研究工作台</div></div>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <button type="button" class="nav-button" data-page="insights" aria-current="page"><span class="nav-number" aria-hidden="true">01</span>全景首页</button>
+        <button type="button" class="nav-button" data-page="analysis"><span class="nav-number" aria-hidden="true">02</span>分布分析</button>
+        <button type="button" class="nav-button" data-page="overview"><span class="nav-number" aria-hidden="true">02</span>跟进总览</button>
+        <button type="button" class="nav-button" data-page="workspace"><span class="nav-number" aria-hidden="true">03</span>个案工作台</button>
+        <button type="button" class="nav-button" data-page="research"><span class="nav-number" aria-hidden="true">04</span>研究说明</button>
+      </nav>
+      <div class="sidebar-footer"><div>研究原型 · 离线结果</div><div>跟进流程为本机会话演练</div><div>CES 成果包 / 2026.11.11</div></div>
+    </aside>
+    <main class="main-content" id="main-content">
+      <div class="topbar"><div id="breadcrumb">研究空间 / 群体态势</div><div class="topbar-meta"><span class="status-dot" aria-hidden="true"></span>CES · 209 份匿名研究记录</div></div>
+      <section class="page" id="page-overview" hidden aria-labelledby="home-title">
+        <div id="home-hero" class="dashboard-hero"></div>
+        <div id="overview-stats" class="action-grid"></div>
+        <section class="flow-section"><div class="section-head"><div><span class="eyebrow">关注之后，如何继续</span><h2>查看跟进进度</h2></div><span class="demo-label">本机流程演练 · 本次会话</span></div><div id="care-flow" class="care-flow"></div><p class="chart-footnote">拖动查看流程，点击阶段进入名单；人数随本次演练更新</p><div id="care-stages" class="care-stages"></div></section>
+        <div class="home-work-grid"><section class="priority-area"><div class="section-head"><div><span class="eyebrow">先看哪些记录</span><h2>查看重点记录</h2></div><button class="button button-quiet" data-open-filter="attention">查看关注名单 ↗</button></div><div id="priority-grid" class="priority-grid"></div></section><aside class="context-area"><div id="quality-insight" class="context-card"></div><section class="context-card"><div class="section-head"><h3>最近演练动态</h3><span class="demo-label">仅本次会话</span></div><div id="recent-activity" class="recent-activity"></div></section></aside></div>
+      </section>
+      <section class="page" id="page-workspace" hidden aria-labelledby="workspace-title">
+        <header class="page-heading"><div class="eyebrow">查看记录，安排跟进</div><h1 id="workspace-title">个案工作台</h1><p class="page-desc">查看行为记录，记录后续安排</p></header>
+        <div class="workspace-layout"><aside class="case-sidebar" aria-label="个案检索与列表"><div class="filter-group"><label for="workspace-search">检索匿名编号</label><input type="search" id="workspace-search" placeholder="输入匿名编号" autocomplete="off"></div><div id="workspace-range" class="range-filter" hidden></div><div class="filter-group"><label for="workspace-tier">分数区间</label><select id="workspace-tier"><option value="all">全部分数区间</option><option value="screened">中、高分研究区间</option><option value="attention">关注与演练名单</option><option value="red">高分区间</option><option value="orange">中分区间</option><option value="green">常态观察</option></select></div><div class="filter-pair"><div class="filter-group"><label for="workspace-quality">数据质量</label><select id="workspace-quality"><option value="all">全部数据质量</option><option value="HIGH_CONFIDENCE">记录充分</option><option value="MEDIUM_CONFIDENCE">基本可用</option></select></div><div class="filter-group"><label for="workspace-stage">演练阶段</label><select id="workspace-stage"><option value="all">全部阶段</option><option value="pending">待复核</option><option value="contact">待沟通</option><option value="followup">跟进中</option><option value="archived">已归档</option></select></div></div><div class="case-count-wrap"><span id="workspace-count" class="muted"></span></div><div id="case-list" class="case-list"></div></aside><article id="case-detail" class="detail-pane" aria-label="当前个案详情"></article></div>
+      </section>
+      <section class="page" id="page-insights" aria-labelledby="insights-title"><header class="page-heading home-heading"><div><div class="eyebrow">从全景开始</div><h1 id="insights-title">观微全景</h1><p class="page-desc">拖动旋转，点选模块查看详情</p></div><button class="button presentation-toggle" id="presentation-toggle" aria-pressed="false">展开汇报视图</button></header><div id="insights-content"></div></section>
+      <section class="page" id="page-analysis" hidden aria-labelledby="analysis-title"><header class="page-heading"><div class="eyebrow">看看记录如何分布</div><h1 id="analysis-title">分布分析</h1><p class="page-desc">旋转图表，查看分数、行为和采集质量</p></header><div id="analysis-content"></div></section>
+      <section class="page" id="page-research" hidden aria-labelledby="research-title"><header class="page-heading"><div class="eyebrow">数据来源与结果范围</div><h1 id="research-title">研究说明</h1><p class="page-desc">了解数据来源和结果范围</p></header><div id="research-content"></div></section>
+      <div id="app-status" class="status-message" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+</body>
+</html>
