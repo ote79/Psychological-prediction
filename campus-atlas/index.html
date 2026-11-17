@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d0e4ff">
+  <meta name="description" content="观微校园行为研究工作台。探索三条行为表征通道与匿名学生的校园驻留记录。">
+  <title>观微 · 多通道校园行为研究</title>
+  <link rel="stylesheet" href="atlas.css">
+  <script defer src="diagram.js"></script>
+  <script defer src="dataset.js"></script>
+  <script defer src="pointmap.js"></script>
+  <script defer src="atlas.js"></script>
+</head>
+<body>
+<main id="home" class="home">
+  <header class="home-head">
+    <a href="#home" class="brand" aria-label="观微首页"><span data-icon="brand"></span>观微<span class="brand-en">Guanwei</span></a>
+    <h1>多通道校园行为研究</h1>
+    <div class="head-actions">
+      <a class="enter" href="#map">进入行为地图 <span data-icon="arrowUpRight"></span></a>
+      <button class="head-icon" data-action="search" aria-label="查找学生" title="查找学生"><span data-icon="search"></span></button>
+      <button class="head-icon" data-action="methods" aria-label="研究方法与数据" title="研究方法与数据"><span data-icon="menu"></span></button>
+    </div>
+  </header>
+  <div class="diagram-scroll" tabindex="0" aria-label="交互式多通道研究架构图"><div id="architecture"></div></div>
+  <div class="mobile-home-actions"><button data-action="enlarge">展开架构图</button></div>
+  <nav class="mobile-index" aria-label="研究架构索引">
+    <h2>研究通道</h2>
+    <button data-channel="rhythm"><span>行为与节律</span><small>观察窗口内的行为均值 ↗</small></button>
+    <button data-channel="spatial"><span>空间驻留与环境熵</span><small>五类地点的驻留分布 ↗</small></button>
+    <button data-channel="latent"><span>行为隐因子</span><small>四维行为表征 ↗</small></button>
+    <button data-channel="quality"><span>质量加权融合</span><small>采集天数与覆盖比例 ↗</small></button>
+    <h2>校园功能区</h2>
+    <div class="mobile-zones"><a href="#map/home">居住</a><a href="#map/study">学习</a><a href="#map/food">餐饮</a><a href="#map/social">社交</a><a href="#map/leisure">休闲</a></div>
+  </nav>
+</main>
+<main id="workspace" class="workspace" hidden>
+  <header class="work-head">
+    <a href="#home" class="work-brand" title="返回研究架构"><span data-icon="brand"></span><b>观微</b></a>
+    <a href="#home" class="back"><span data-icon="back"></span><span>研究架构</span></a>
+    <h1>校园行为地图 <small>/ Campus Atlas</small></h1>
+    <button data-action="map-info" title="地图读法" aria-label="地图读法"><span data-icon="book"></span></button>
+    <button class="export" data-action="export"><span data-icon="download"></span><span>导出记录</span></button>
+  </header>
+  <div class="work-body">
+    <nav class="rail" aria-label="地图工具">
+      <button data-action="students" title="学生索引" aria-label="学生索引"><span data-icon="database"></span></button>
+      <button data-action="filters" title="筛选条件" aria-label="筛选条件"><span data-icon="filter"></span></button>
+      <button data-action="map-info" title="图例与数据说明" aria-label="图例与数据说明"><span data-icon="info"></span></button>
+      <a class="rail-bottom" href="#home" title="返回研究架构" aria-label="返回研究架构"><span data-icon="home"></span></a>
+    </nav>
+    <aside id="side" class="side">
+      <header><strong id="sideTitle"></strong><button data-action="close-side" title="收起面板" aria-label="收起面板"><span data-icon="close"></span></button></header>
+      <div id="sideContent"></div>
+    </aside>
+    <section class="map-body" aria-label="校园驻留点图">
+      <div class="plot" id="plot">
+        <canvas id="points" tabindex="0" aria-label="校园功能区驻留点图，可通过学生索引或下方记录按钮查看学生"></canvas>
+        <div class="plot-tools"><button data-action="fit"><span data-icon="fit"></span>适应视图</button><button data-action="area" id="areaBtn" aria-pressed="false"><span data-icon="area"></span>区域框选</button><button data-action="clear-area" id="clearArea" hidden>清除框选</button></div>
+        <div class="zoom"><button data-action="zoom-in" title="放大" aria-label="放大">+</button><button data-action="zoom-out" title="缩小" aria-label="缩小">−</button></div>
+        <div id="hoverTip" class="hover-tip" hidden></div>
+        <div class="legend"><div><i class="gold"></i>常规与中分组驻留</div><div><i class="purple"></i>高分组驻留</div></div>
+        <output id="mapCount" class="map-count"></output>
+        <div class="empty" id="noEvents" hidden>当前条件下没有驻留记录 <button data-action="reset">重置筛选</button></div>
+      </div>
+      <section class="timeline" aria-label="观察日时间轴">
+        <button data-action="play" id="play" title="按日播放" aria-label="按日播放"><span data-icon="play"></span></button>
+        <div class="timeline-track"><div class="ticks"><span>D01</span><span>D14</span><span>D28</span><span>D42</span><span>D56</span></div>
+          <div id="timelineBars" title="拖动选择观察日范围，双击显示全部"></div>
+        </div>
+        <button class="day-readout" data-action="all-days" title="恢复全部观察日" id="dayReadout"></button>
+      </section>
+    </section>
+  </div>
+</main>
+<dialog id="dialog"><div class="dialog-head"><span class="dialog-brand"><span data-icon="brand"></span>观微研究工作台</span><button data-action="dismiss" aria-label="关闭"><span data-icon="close"></span></button></div><div id="dialogContent"></div></dialog>
+</body>
+</html>
