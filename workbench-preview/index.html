@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="基于时空行为感知与多通道图增强的校园心理危机智能预警工作台">
-  <title>观微 · 校园心理时空智能预警工作台</title>
+  <meta name="description" content="基于 Palantir Foundry 架构与 Cosmograph 轨迹星图的校园心理危机智能预警工作台">
+  <title>Palantir Foundry × Cosmograph · 观微</title>
   <link rel="stylesheet" href="ui.css">
   <script defer src="data.js"></script>
   <script defer src="trajectories.js"></script>
@@ -13,379 +13,491 @@
   <script defer src="visuals.js"></script>
   <script defer src="app.js"></script>
 </head>
-<body class="mode-foundry">
+<body class="theme-foundry">
 
-  <!-- ================= TOP GLOBAL NAVIGATION BAR ================= -->
-  <header class="global-navbar">
-    <div class="nav-brand">
-      <div class="brand-logo">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-          <path d="M2 12h20"/>
-        </svg>
-      </div>
-      <div class="brand-text">
-        <span class="brand-title">GUANWEI 观微</span>
-        <span class="brand-tag">校园心理时空态势工作台</span>
-      </div>
+  <!-- ================= PALANTIR STYLE WHITE HEADER ================= -->
+  <header class="palantir-header">
+    <div class="palantir-brand">
+      <svg class="palantir-logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 3v18M3 12h18"/>
+      </svg>
+      <span class="palantir-logo-text">Palantir</span>
+      <span class="brand-divider">|</span>
+      <span class="research-brand-text">GUANWEI 观微</span>
     </div>
 
-    <!-- Mode / View Navigation Switcher -->
-    <nav class="nav-tabs" aria-label="视图模式切换">
-      <button type="button" class="tab-btn active" data-view="foundry" title="Palantir Foundry 风格顶层系统架构">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-        </svg>
-        <span>顶层架构 (Foundry)</span>
-      </button>
+    <div class="palantir-center-ribbon">
+      <span class="ribbon-dash"></span>
+      <span class="ribbon-text">HUMAN + AGENT TEAMS</span>
+      <span class="ribbon-dash"></span>
+    </div>
 
-      <button type="button" class="tab-btn" data-view="cosmograph" title="Cosmograph 风格深空时空轨迹点云星图">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-        <span>轨迹星图 (Cosmograph)</span>
-        <span class="pulse-dot"></span>
-      </button>
-
-      <button type="button" class="tab-btn" data-view="cases" title="209 名学生档案与大模型辅导员研判">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>个案研判 (Cases)</span>
-      </button>
-
-      <button type="button" class="tab-btn" data-view="research" title="MCH 多通道模型 5 折交叉验证指标">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 20V10M12 20V4M6 20v-6"/>
-        </svg>
-        <span>实验基准 (Benchmark)</span>
-      </button>
-    </nav>
-
-    <!-- Top Right Stats & Actions -->
-    <div class="nav-meta">
-      <div class="meta-pill" title="基于真实大学体验研究数据集 (College Experience Study)">
-        <span class="indicator-green"></span>
-        <span>CES 真实队列 · 209 人</span>
+    <div class="palantir-nav-actions">
+      <div class="view-switcher-group">
+        <button type="button" class="view-switch-btn active" data-view="foundry">
+          <span>FOUNDRY 架构</span>
+        </button>
+        <button type="button" class="view-switch-btn" data-view="cosmograph" id="btn-top-cosmograph">
+          <span>COSMOGRAPH 星图</span>
+        </button>
+        <button type="button" class="view-switch-btn" data-view="cases">
+          <span>CASES 档案</span>
+        </button>
+        <button type="button" class="view-switch-btn" data-view="research">
+          <span>BENCHMARK 验证</span>
+        </button>
       </div>
-      <div class="meta-pill highlight" title="空间通道低阈值 (0.46) 阳性检出率">
-        <span>检出召回 73.8%</span>
-      </div>
-      <button type="button" class="quick-launch-btn" id="btn-dive-cosmograph" title="直接下钻进入 Cosmograph 深空轨迹点云">
-        <span>下钻星图</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M7 17L17 7M7 7h10v10"/>
-        </svg>
+
+      <button type="button" class="btn-get-started" id="btn-quick-launch-star">
+        <span>Get Started ↗</span>
       </button>
     </div>
   </header>
 
 
   <!-- ================= VIEW 1: PALANTIR FOUNDRY ARCHITECTURE ================= -->
-  <main class="view-panel active" id="view-foundry" aria-label="Palantir 架构顶层全景">
-    <div class="foundry-container">
-      
-      <!-- Top Title Ribbon -->
-      <div class="foundry-ribbon">
-        <div class="ribbon-line"></div>
-        <div class="ribbon-badge">
-          <span class="ribbon-brand">PALANTIR FOUNDRY × GUANWEI ARCHITECTURE</span>
-          <span class="ribbon-sub">HUMAN + AGENT TEAMS · SPATIO-TEMPORAL ONTOLOGY</span>
-        </div>
-        <div class="ribbon-line"></div>
-      </div>
+  <main class="view-panel active" id="view-foundry" aria-label="Palantir Foundry 架构">
+    <div class="palantir-canvas">
 
-      <!-- Tier 1: Three Architectural Application Panels -->
-      <div class="foundry-tier tier-top">
-        <!-- Panel 1: Analytics + Workflows -->
-        <div class="arch-card" id="card-analytics">
-          <div class="card-screen">
-            <div class="screen-header">
-              <span class="traffic-dots"><i></i><i></i><i></i></span>
-              <span class="screen-title">PASSIVE SENSING DASHBOARD</span>
-              <span class="screen-status">LIVE STREAM</span>
-            </div>
-            <div class="screen-mockup">
-              <svg class="mini-chart" viewBox="0 0 200 65" fill="none">
-                <path d="M0 45 Q 25 20, 50 35 T 100 25 T 150 40 T 200 15" stroke="#0284c7" stroke-width="2" fill="none"/>
-                <path d="M0 45 Q 25 20, 50 35 T 100 25 T 150 40 T 200 15 L 200 65 L 0 65 Z" fill="url(#grad-blue)" opacity="0.15"/>
-                <defs>
-                  <linearGradient id="grad-blue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#0284c7"/>
-                    <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
-                  </linearGradient>
-                </defs>
-                <circle cx="100" cy="25" r="3" fill="#0284c7"/>
-                <line x1="100" y1="0" x2="100" y2="65" stroke="#0284c7" stroke-dasharray="2 2" opacity="0.5"/>
-              </svg>
-              <div class="mini-metrics">
-                <div><span>全校日均驻留</span><strong>13.2h</strong></div>
-                <div><span>深夜解锁偏离</span><strong>+0.82σ</strong></div>
-                <div><span>高危关注漏斗</span><strong class="red-text">14 / 62</strong></div>
-              </div>
-            </div>
-          </div>
-          <div class="card-label">
-            <h3>ANALYTICS + WORKFLOWS</h3>
-            <p>全周期被动感知大屏 · 辅导员多维驾驶舱</p>
-          </div>
-        </div>
-
-        <!-- Panel 2: Agent Building -->
-        <div class="arch-card highlight-card" id="card-agent">
-          <div class="card-screen">
-            <div class="screen-header">
-              <span class="traffic-dots"><i></i><i></i><i></i></span>
-              <span class="screen-title">MCP AGENT PIPELINE</span>
-              <span class="screen-status active">AUTONOMOUS</span>
-            </div>
-            <div class="screen-mockup agent-flow">
-              <div class="flow-node"><span>CA-Gate</span><small>置信度审计</small></div>
-              <div class="flow-arrow">➔</div>
-              <div class="flow-node center-node"><span>LLM Agent</span><small>辅导员研判</small></div>
-              <div class="flow-arrow">➔</div>
-              <div class="flow-node"><span>Intervention</span><small>阶梯关怀</small></div>
-            </div>
-          </div>
-          <div class="card-label">
-            <h3>AGENT BUILDING</h3>
-            <p>心理危机智能体 · MCP 自监督推理管线</p>
-          </div>
-        </div>
-
-        <!-- Panel 3: Products & SDKs -->
-        <div class="arch-card" id="card-sdk">
-          <div class="card-screen">
-            <div class="screen-header">
-              <span class="traffic-dots"><i></i><i></i><i></i></span>
-              <span class="screen-title">API & SAFETY SANDBOX</span>
-              <span class="screen-status">PROTECTED</span>
-            </div>
-            <div class="screen-mockup sdk-grid">
-              <div class="sdk-badge"><code>POST /v1/triage</code></div>
-              <div class="sdk-badge"><code>GET /v1/student/{id}</code></div>
-              <div class="sdk-badge"><code>CA-Gate SDK v2.4</code></div>
-              <div class="sdk-badge"><code>Zero-Raw-GPS Safe</code></div>
-            </div>
-          </div>
-          <div class="card-label">
-            <h3>PRODUCTS & SDKs</h3>
-            <p>学工中台标准接口 · 隐私安全隔离沙箱</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Connecting Bus 1 (Vector Cables) -->
-      <div class="foundry-bus bus-top">
-        <svg viewBox="0 0 1000 60" preserveAspectRatio="none">
-          <path d="M 170 0 C 170 30, 480 30, 480 60" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
-          <path d="M 500 0 L 500 60" stroke="#0284c7" stroke-width="2" fill="none"/>
-          <path d="M 830 0 C 830 30, 520 30, 520 60" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
-          <text x="320" y="28" fill="#64748b" font-size="11" font-weight="600" letter-spacing="1">↑ READS + WRITES ↓</text>
-          <text x="610" y="28" fill="#64748b" font-size="11" font-weight="600" letter-spacing="1">↑ MCP PROTOCOL ↓</text>
-        </svg>
-      </div>
-
-      <!-- Tier 2: The Core Isometric Platform: ONTOLOGY SYSTEM -->
-      <div class="foundry-tier tier-ontology">
-        <div class="ontology-stage">
-          
-          <!-- Left Floating Zone Card -->
-          <div class="floating-card left-card">
-            <div class="float-header">
-              <span class="card-pin">#ZONE 04A</span>
-              <span class="badge-tag live">LIVE 实时分析</span>
-            </div>
-            <div class="float-title">南区宿舍生活区 (Dormitory Hub)</div>
-            <div class="float-rows">
-              <div class="row"><span>当前状态</span><strong class="warn">● 异常滞留高聚</strong></div>
-              <div class="row"><span>群体日均驻留</span><strong>13.82 小时</strong></div>
-              <div class="row"><span>空间转移熵</span><strong>0.42 (低熵停滞)</strong></div>
-              <div class="row"><span>预警关联个体</span><strong class="red-text">14 份高危 / 62 份中危</strong></div>
-              <div class="row"><span>数据充分率</span><strong>95.2% (CA-Gate)</strong></div>
-            </div>
-            <div class="float-actions">
-              <button type="button" class="btn-zone-filter" data-zone="dorm">在星图中定位该簇 ↗</button>
-            </div>
-          </div>
-
-          <!-- Central 2.5D Isometric Campus Ontology Surface -->
-          <div class="ontology-isometric-board" id="ontology-board">
-            <div class="isometric-grid-surface">
-              <!-- Animated Grid Background -->
-              <div class="grid-mesh"></div>
-
-              <!-- Campus Nodes in 2.5D Space -->
-              <div class="iso-node node-dorm" data-zone="dorm" title="南区宿舍生活区">
-                <div class="node-icon">🏢</div>
-                <div class="node-name">宿舍生活区</div>
-                <div class="node-sub">Dormitory Zone</div>
-                <div class="node-ring pulse-purple"></div>
-              </div>
-
-              <div class="iso-node node-library" data-zone="library" title="图文信息中心与教学楼">
-                <div class="node-icon">📚</div>
-                <div class="node-name">图文教学中心</div>
-                <div class="node-sub">Academic Hub</div>
-                <div class="node-ring pulse-yellow"></div>
-              </div>
-
-              <div class="iso-node node-canteen" data-zone="canteen" title="生活广场与餐饮中心">
-                <div class="node-icon">🍲</div>
-                <div class="node-name">生活餐饮广场</div>
-                <div class="node-sub">Dining & Services</div>
-                <div class="node-ring pulse-blue"></div>
-              </div>
-
-              <div class="iso-node node-sports" data-zone="sports" title="文体运动中心与操场">
-                <div class="node-icon">🏃</div>
-                <div class="node-name">文体运动中心</div>
-                <div class="node-sub">Social & Sports</div>
-                <div class="node-ring pulse-yellow"></div>
-              </div>
-
-              <div class="iso-node node-offcampus" data-zone="offcampus" title="校外漫游区">
-                <div class="node-icon">🧭</div>
-                <div class="node-name">校外漫游带</div>
-                <div class="node-sub">Off-Campus Entropy</div>
-                <div class="node-ring pulse-blue"></div>
-              </div>
-
-              <!-- Connecting Energy Links in 2.5D -->
-              <svg class="iso-links" viewBox="0 0 600 350">
-                <line x1="160" y1="200" x2="300" y2="120" stroke="#0284c7" stroke-width="2" stroke-dasharray="6 4" class="anim-dash"/>
-                <line x1="300" y1="120" x2="460" y2="190" stroke="#0284c7" stroke-width="2" stroke-dasharray="6 4" class="anim-dash"/>
-                <line x1="160" y1="200" x2="310" y2="270" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6 4" class="anim-dash"/>
-                <line x1="310" y1="270" x2="460" y2="190" stroke="#0284c7" stroke-width="2" stroke-dasharray="6 4" class="anim-dash"/>
-                <line x1="460" y1="190" x2="520" y2="80" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4"/>
-              </svg>
-
-              <!-- Central Dive Portal: The bridge to Cosmograph -->
-              <div class="iso-portal-box" id="portal-dive">
-                <div class="portal-halo"></div>
-                <div class="portal-content">
-                  <div class="portal-badge">⚡ COSMOGRAPH WEBGL 引擎</div>
-                  <h4 class="portal-title">下钻微观时空轨迹星图</h4>
-                  <p class="portal-desc">展开 209 人 · 11,850 真实时空滞留点云深空全景</p>
-                  <button type="button" class="btn-dive-nebula">
-                    <span>立即进入轨迹星图</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <circle cx="12" cy="12" r="10"/><path d="m10 8 4 4-4 4"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Right Floating Access Control Card -->
-          <div class="floating-card right-card">
-            <div class="float-header">
-              <span class="card-pin">SECURITY</span>
-              <span class="badge-tag safe">PRIVACY GUARD</span>
-            </div>
-            <div class="float-title">三级权限与去标识化防护</div>
-            <div class="policy-table">
-              <div class="p-row head"><span>角色</span><span>访问范围</span><span>脱敏策略</span></div>
-              <div class="p-row"><span>辅导员</span><span class="scope">去标识化评分</span><span class="sec">匿名 UID / 行为偏差</span></div>
-              <div class="p-row"><span>心理中心</span><span class="scope">高危研判报告</span><span class="sec">绿色通道 / 医生密匙</span></div>
-              <div class="p-row"><span>学工处</span><span class="scope">宏观态势大屏</span><span class="sec">群体聚集 / 无个体隐私</span></div>
-              <div class="p-row"><span>底层存储</span><span class="scope">无原始轨迹</span><span class="sec">仅存空间转移熵特征</span></div>
-            </div>
-            <div class="float-footer-note">
-              <span>* 严格遵守《数据安全法》与高校隐私合规规范</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Base Platform Banner -->
-        <div class="ontology-platform-banner">
-          <div class="banner-pill">OBJECTS · PROPERTIES · GRAPH TOPOLOGIES · CA-GATE AUDITED</div>
-          <div class="banner-title">ANY SENSING STREAM · ANY FEDERATED COMPUTE</div>
-        </div>
-      </div>
-
-      <!-- Connecting Bus 2 (Vector Cables) -->
-      <div class="foundry-bus bus-bottom">
-        <svg viewBox="0 0 1000 50" preserveAspectRatio="none">
-          <line x1="125" y1="0" x2="125" y2="50" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <line x1="375" y1="0" x2="375" y2="50" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <line x1="625" y1="0" x2="625" y2="50" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
-          <line x1="875" y1="0" x2="875" y2="50" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
-        </svg>
-      </div>
-
-      <!-- Tier 3: Four Foundation Pillars (DATA, LOGIC, MODELS, ACTIONS) -->
-      <div class="foundry-tier tier-bottom">
+      <!-- Top Row: Three Monitor Displays -->
+      <section class="monitors-row">
         
-        <!-- Box 1: DATA -->
-        <div class="foundation-box" id="box-data">
-          <div class="box-head">
-            <span class="box-tag">INPUT</span>
-            <h4>DATA</h4>
+        <!-- Monitor 1: Analytics + Workflows -->
+        <div class="monitor-wrapper">
+          <div class="monitor-screen">
+            <div class="screen-chrome">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="chrome-title">CAMPUS SPATIO-TEMPORAL DASHBOARD</span>
+              <span class="chrome-badge">PASSIVE SENSING</span>
+            </div>
+            <div class="screen-viewport">
+              <svg class="monitor-svg" viewBox="0 0 260 110">
+                <line x1="20" y1="90" x2="240" y2="90" stroke="#cbd5e1" stroke-width="1"/>
+                <line x1="20" y1="20" x2="20" y2="90" stroke="#cbd5e1" stroke-width="1"/>
+                <!-- Multi-modal trend lines -->
+                <path d="M 20 70 Q 60 30, 100 55 T 160 35 T 220 60 T 240 25" fill="none" stroke="#0284c7" stroke-width="1.8"/>
+                <path d="M 20 85 Q 70 65, 120 75 T 180 50 T 240 45" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <circle cx="160" cy="35" r="3.5" fill="#0284c7"/>
+                <line x1="160" y1="20" x2="160" y2="90" stroke="#0284c7" stroke-width="1" stroke-dasharray="2 2"/>
+                <rect x="25" y="25" width="60" height="20" rx="3" fill="#f1f5f9" stroke="#e2e8f0"/>
+                <text x="32" y="38" font-size="8" fill="#475569" font-family="monospace">N=209 COHORT</text>
+              </svg>
+            </div>
           </div>
-          <p class="box-subtitle">被动多模态感知流</p>
-          <div class="box-switches">
-            <label class="switch-item"><input type="checkbox" checked disabled><span>WiFi BSSID/AP 接入日志</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>GPS 空间聚类停留点</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>手机屏幕亮起与解锁频次</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>蓝牙 BLE 邻近社交接触</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>加速度计日常步态运动</span></label>
-          </div>
-        </div>
-
-        <!-- Box 2: LOGIC -->
-        <div class="foundation-box" id="box-logic">
-          <div class="box-head">
-            <span class="box-tag">AUDIT</span>
-            <h4>LOGIC</h4>
-          </div>
-          <p class="box-subtitle">特征拓扑与增强逻辑</p>
-          <div class="box-switches">
-            <label class="switch-item highlight-switch"><input type="checkbox" checked disabled><span>★ CA-Gate 置信度审计门控</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>时空转移图高斯扩散模糊</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>次要功能区节点随机掩码</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>校园往返路径对称对偶增强</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>空间驻留熵动态衰减提取</span></label>
+          <div class="monitor-stand"></div>
+          <div class="monitor-base"></div>
+          <div class="monitor-title-box">
+            <h3>ANALYTICS + WORKFLOWS</h3>
           </div>
         </div>
 
-        <!-- Box 3: MODELS -->
-        <div class="foundation-box highlight-box" id="box-models">
-          <div class="box-head">
-            <span class="box-tag">FUSION</span>
-            <h4>MODELS</h4>
+        <!-- Monitor 2: Agent Building -->
+        <div class="monitor-wrapper">
+          <div class="monitor-screen">
+            <div class="screen-chrome">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="chrome-title">AUTONOMOUS LLM TRIAGE PIPELINE</span>
+              <span class="chrome-badge live">MCP LIVE</span>
+            </div>
+            <div class="screen-viewport">
+              <svg class="monitor-svg" viewBox="0 0 260 110">
+                <!-- Circuit grid -->
+                <rect x="20" y="40" width="55" height="30" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+                <text x="27" y="58" font-size="8.5" font-weight="700" fill="#0f172a" font-family="sans-serif">CA-Gate</text>
+                
+                <line x1="75" y1="55" x2="105" y2="55" stroke="#0284c7" stroke-width="1.5"/>
+                
+                <rect x="105" y="35" width="60" height="40" rx="4" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5"/>
+                <text x="113" y="55" font-size="9" font-weight="700" fill="#0369a1" font-family="sans-serif">LLM Agent</text>
+                <text x="116" y="66" font-size="7" fill="#64748b" font-family="monospace">Counselor</text>
+
+                <line x1="165" y1="55" x2="195" y2="55" stroke="#0284c7" stroke-width="1.5"/>
+
+                <rect x="195" y="40" width="55" height="30" rx="3" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+                <text x="203" y="58" font-size="8" font-weight="700" fill="#0f172a" font-family="sans-serif">Triage Care</text>
+
+                <!-- Lightning energy pulses -->
+                <path d="M 90 48 L 94 54 L 88 56 L 92 62" stroke="#eab308" stroke-width="1.5" fill="none"/>
+                <path d="M 180 48 L 184 54 L 178 56 L 182 62" stroke="#eab308" stroke-width="1.5" fill="none"/>
+              </svg>
+            </div>
           </div>
-          <p class="box-subtitle">MCH 多通道协同架构</p>
-          <div class="box-switches">
-            <label class="switch-item"><input type="checkbox" checked disabled><span>Ch1: 时序自监督对比增强</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>Ch2: 校园时空图拓扑增强</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>Ch3: 潜表型协同过滤SVD分解</span></label>
-            <label class="switch-item highlight-switch"><input type="checkbox" checked disabled><span>★ 严格 5 折 Stratified 交叉验证</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>检出召回率 73.8% (@ 0.46)</span></label>
+          <div class="monitor-stand"></div>
+          <div class="monitor-base"></div>
+          <div class="monitor-title-box">
+            <h3>AGENT BUILDING</h3>
           </div>
         </div>
 
-        <!-- Box 4: ACTIONS -->
-        <div class="foundation-box" id="box-actions">
-          <div class="box-head">
-            <span class="box-tag">OUTPUT</span>
-            <h4>ACTIONS</h4>
+        <!-- Monitor 3: Products & SDKs -->
+        <div class="monitor-wrapper">
+          <div class="monitor-screen">
+            <div class="screen-chrome">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="chrome-title">REST API & SAFETY ENCLAVE</span>
+              <span class="chrome-badge">ZERO-RAW-GPS</span>
+            </div>
+            <div class="screen-viewport">
+              <svg class="monitor-svg" viewBox="0 0 260 110">
+                <!-- Mobile Mockup -->
+                <rect x="30" y="20" width="45" height="75" rx="5" fill="#ffffff" stroke="#64748b" stroke-width="1.2"/>
+                <line x1="42" y1="26" x2="62" y2="26" stroke="#94a3b8" stroke-width="1.5"/>
+                <rect x="36" y="34" width="33" height="15" rx="2" fill="#e0f2fe"/>
+                <rect x="36" y="54" width="33" height="8" rx="1.5" fill="#f1f5f9"/>
+                <rect x="36" y="66" width="33" height="8" rx="1.5" fill="#f1f5f9"/>
+
+                <!-- Isometric 3D Security Cube -->
+                <g transform="translate(130, 50)">
+                  <polygon points="0,-20 18,-10 0,0 -18,-10" fill="#60a5fa" stroke="#2563eb" stroke-width="1"/>
+                  <polygon points="-18,-10 0,0 0,20 -18,10" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1"/>
+                  <polygon points="18,-10 0,0 0,20 18,10" fill="#1d4ed8" stroke="#1e40af" stroke-width="1"/>
+                </g>
+
+                <!-- API Hierarchy Tree -->
+                <line x1="185" y1="35" x2="215" y2="35" stroke="#94a3b8" stroke-width="1"/>
+                <line x1="200" y1="35" x2="200" y2="80" stroke="#94a3b8" stroke-width="1"/>
+                <line x1="200" y1="55" x2="225" y2="55" stroke="#94a3b8" stroke-width="1"/>
+                <line x1="200" y1="80" x2="235" y2="80" stroke="#94a3b8" stroke-width="1"/>
+                <circle cx="215" cy="35" r="2.5" fill="#0284c7"/>
+                <circle cx="225" cy="55" r="2.5" fill="#0284c7"/>
+                <circle cx="235" cy="80" r="2.5" fill="#0284c7"/>
+              </svg>
+            </div>
           </div>
-          <p class="box-subtitle">阶梯分级协同干预</p>
-          <div class="box-switches">
-            <label class="switch-item"><input type="checkbox" checked disabled><span>辅导员一对一非侵入性关怀</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>心理咨询中心医疗绿色通道</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>院系宿管网格化生活排查</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>学业预警与朋辈互助陪伴</span></label>
-            <label class="switch-item"><input type="checkbox" checked disabled><span>全流程跟进记录闭环存证</span></label>
+          <div class="monitor-stand"></div>
+          <div class="monitor-base"></div>
+          <div class="monitor-title-box">
+            <h3>PRODUCTS & SDKs</h3>
           </div>
         </div>
 
-      </div>
+      </section>
+
+      <!-- Connecting Cables Fanning Downward -->
+      <section class="cables-fanning">
+        <svg viewBox="0 0 1100 80" preserveAspectRatio="none">
+          <!-- Left side cables -->
+          <path d="M 200 0 C 200 45, 480 35, 480 80" stroke="#1e293b" stroke-width="1.2" fill="none"/>
+          <path d="M 220 0 C 220 40, 500 35, 500 80" stroke="#1e293b" stroke-width="1.2" fill="none"/>
+          <path d="M 240 0 C 240 35, 520 35, 520 80" stroke="#1e293b" stroke-width="1.2" fill="none"/>
+          <!-- Right side cables -->
+          <path d="M 900 0 C 900 45, 620 35, 620 80" stroke="#1e293b" stroke-width="1.2" fill="none"/>
+          <path d="M 880 0 C 880 40, 600 35, 600 80" stroke="#1e293b" stroke-width="1.2" fill="none"/>
+          <path d="M 860 0 C 860 35, 580 35, 580 80" stroke="#1e293b" stroke-width="1.2" fill="none"/>
+          <!-- Cable labels -->
+          <text x="310" y="38" font-size="10" font-weight="700" fill="#0f172a" font-family="sans-serif">↑ READS + WRITES ↓</text>
+          <text x="690" y="38" font-size="10" font-weight="700" fill="#0f172a" font-family="sans-serif">↑ READS + WRITES ↓</text>
+        </svg>
+        <div class="mcp-badges-row">
+          <span class="mcp-pill">MCP</span>
+          <span class="mcp-pill">MCP</span>
+          <span class="mcp-pill">MCP</span>
+          <span class="mcp-pill">MCP</span>
+          <span class="mcp-pill">SDK</span>
+          <span class="mcp-pill">SDK</span>
+          <span class="mcp-pill">API</span>
+        </div>
+      </section>
+
+      <!-- Center: The 2.5D Isometric ONTOLOGY SYSTEM Platform -->
+      <section class="ontology-master-stage" id="ontology-master-stage" title="点击下钻进入 Cosmograph 深空轨迹星图">
+        
+        <!-- Left Floating Card: # ZONE 04A (Dormitory) -->
+        <div class="palantir-float-card card-left">
+          <div class="f-card-header">
+            <span class="f-card-tag"># ZONE 04A</span>
+            <span class="f-card-pill-blue">Campus Object</span>
+          </div>
+          <table class="f-card-table">
+            <tr><td>Status</td><td class="bold red-dot">● Anomalous Retreat</td></tr>
+            <tr><td>Residence Hours (Avg)</td><td class="bold">18.34h</td></tr>
+            <tr><td>Spatial Entropy</td><td class="bold">0.42</td></tr>
+            <tr><td>Flagged Positives</td><td class="bold red-dot">● 14 Students</td></tr>
+            <tr><td>CA-Gate Uptime</td><td class="bold">● 99.90%</td></tr>
+            <tr><td>Efficiency Score</td><td class="bold">● 88</td></tr>
+          </table>
+          <div class="f-card-hint">
+            <span>点击中央平台进入微观星图 ↘</span>
+          </div>
+        </div>
+
+        <!-- The 2.5D Isometric Platform SVG Drawing -->
+        <div class="isometric-canvas-wrap">
+          <svg class="isometric-svg" viewBox="0 0 960 480">
+            <defs>
+              <!-- Blue circular halo gradient -->
+              <radialGradient id="node-halo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.55"/>
+                <stop offset="70%" stop-color="#0284c7" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="node-halo-purple" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#c084fc" stop-opacity="0.6"/>
+                <stop offset="70%" stop-color="#9333ea" stop-opacity="0.28"/>
+                <stop offset="100%" stop-color="#9333ea" stop-opacity="0"/>
+              </radialGradient>
+              <!-- Arrow marker -->
+              <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0284c7"/>
+              </marker>
+            </defs>
+
+            <!-- 2.5D Isometric Diamond Grid Platform -->
+            <polygon points="120,30 840,30 940,390 20,390" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+            <!-- Grid lines -->
+            <g stroke="#e2e8f0" stroke-width="1" opacity="0.8">
+              <line x1="80" y1="90" x2="860" y2="90"/>
+              <line x1="60" y1="150" x2="880" y2="150"/>
+              <line x1="45" y1="210" x2="900" y2="210"/>
+              <line x1="35" y1="270" x2="915" y2="270"/>
+              <line x1="25" y1="330" x2="930" y2="330"/>
+              <!-- Cross isometric lines -->
+              <line x1="240" y1="30" x2="160" y2="390"/>
+              <line x1="360" y1="30" x2="310" y2="390"/>
+              <line x1="480" y1="30" x2="480" y2="390"/>
+              <line x1="600" y1="30" x2="650" y2="390"/>
+              <line x1="720" y1="30" x2="800" y2="390"/>
+            </g>
+
+            <!-- ================= ISOMETRIC NODES & VECTOR OBJECTS ================= -->
+
+            <!-- Node 1: Dormitory Zone (South Living Block - High Risk Retreat) -->
+            <g transform="translate(180, 240)">
+              <!-- Glowing blue/purple ring -->
+              <ellipse cx="0" cy="0" rx="65" ry="32" fill="url(#node-halo-purple)"/>
+              <ellipse cx="0" cy="0" rx="55" ry="26" fill="none" stroke="#a855f7" stroke-width="1.8"/>
+              <!-- Isometric building drawing -->
+              <polygon points="-25,-20 0,-32 25,-20 0,-8" fill="#f8fafc" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="-25,-20 0,-8 0,22 -25,10" fill="#e2e8f0" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="25,-20 0,-8 0,22 25,10" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+              <!-- Pill badge -->
+              <rect x="-42" y="26" width="84" height="18" rx="9" fill="#0284c7"/>
+              <text x="0" y="38" font-size="8.5" font-weight="700" fill="#ffffff" text-anchor="middle">Dormitory Zone</text>
+              <rect x="-48" y="-46" width="96" height="17" rx="8.5" fill="#1e293b"/>
+              <text x="0" y="-35" font-size="7.5" font-weight="700" fill="#fca5a5" text-anchor="middle">Flag Risk Isolation</text>
+            </g>
+
+            <!-- Node 2: Library & Academic Hub (North Academic Center) -->
+            <g transform="translate(300, 100)">
+              <ellipse cx="0" cy="0" rx="58" ry="28" fill="url(#node-halo)"/>
+              <ellipse cx="0" cy="0" rx="48" ry="22" fill="none" stroke="#0284c7" stroke-width="1.8"/>
+              <!-- Isometric library racks -->
+              <polygon points="-20,-15 0,-25 20,-15 0,-5" fill="#f8fafc" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="-20,-15 0,-5 0,18 -20,8" fill="#e2e8f0" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="20,-15 0,-5 0,18 20,8" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+              <rect x="-35" y="20" width="70" height="18" rx="9" fill="#0284c7"/>
+              <text x="0" y="32" font-size="8.5" font-weight="700" fill="#ffffff" text-anchor="middle">Academic Hub</text>
+              <rect x="-40" y="-38" width="80" height="17" rx="8.5" fill="#047857"/>
+              <text x="0" y="-27" font-size="7.5" font-weight="700" fill="#ffffff" text-anchor="middle">Audit Engagement</text>
+            </g>
+
+            <!-- Node 3: Dining & Services Hub (Canteen & Social Plaza) -->
+            <g transform="translate(480, 220)">
+              <ellipse cx="0" cy="0" rx="60" ry="29" fill="url(#node-halo)"/>
+              <ellipse cx="0" cy="0" rx="50" ry="23" fill="none" stroke="#0284c7" stroke-width="1.8"/>
+              <!-- Delivery vans / vans drawing -->
+              <polygon points="-18,-10 0,-18 18,-10 0,-2" fill="#f8fafc" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="-18,-10 0,-2 0,12 -18,4" fill="#e2e8f0" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="18,-10 0,-2 0,12 18,4" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+              <rect x="-32" y="20" width="64" height="18" rx="9" fill="#0284c7"/>
+              <text x="0" y="32" font-size="8.5" font-weight="700" fill="#ffffff" text-anchor="middle">Dining Plaza</text>
+              <rect x="-38" y="-32" width="76" height="17" rx="8.5" fill="#047857"/>
+              <text x="0" y="-21" font-size="7.5" font-weight="700" fill="#ffffff" text-anchor="middle">Mobility Influx</text>
+            </g>
+
+            <!-- Node 4: Sports & Social Hub -->
+            <g transform="translate(680, 120)">
+              <ellipse cx="0" cy="0" rx="58" ry="28" fill="url(#node-halo)"/>
+              <ellipse cx="0" cy="0" rx="48" ry="22" fill="none" stroke="#0284c7" stroke-width="1.8"/>
+              <!-- Office towers / Stadium -->
+              <polygon points="-16,-20 0,-28 16,-20 0,-12" fill="#f8fafc" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="-16,-20 0,-12 0,16 -16,8" fill="#e2e8f0" stroke="#334155" stroke-width="1.2"/>
+              <polygon points="16,-20 0,-12 0,16 16,8" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+              <rect x="-34" y="20" width="68" height="18" rx="9" fill="#0284c7"/>
+              <text x="0" y="32" font-size="8.5" font-weight="700" fill="#ffffff" text-anchor="middle">Social Sports</text>
+              <rect x="-38" y="-38" width="76" height="17" rx="8.5" fill="#7c3aed"/>
+              <text x="0" y="-27" font-size="7.5" font-weight="700" fill="#ffffff" text-anchor="middle">BLE Proximity</text>
+            </g>
+
+            <!-- Node 5: Off-Campus & Entropy Hub -->
+            <g transform="translate(800, 270)">
+              <ellipse cx="0" cy="0" rx="55" ry="26" fill="url(#node-halo)"/>
+              <ellipse cx="0" cy="0" rx="45" ry="20" fill="none" stroke="#0284c7" stroke-width="1.8"/>
+              <rect x="-32" y="20" width="64" height="18" rx="9" fill="#0284c7"/>
+              <text x="0" y="32" font-size="8.5" font-weight="700" fill="#ffffff" text-anchor="middle">Off-Campus</text>
+              <rect x="-42" y="-32" width="84" height="17" rx="8.5" fill="#047857"/>
+              <text x="0" y="-21" font-size="7.5" font-weight="700" fill="#ffffff" text-anchor="middle">Roaming Entropy</text>
+            </g>
+
+            <!-- Directed Connecting Links with Labels -->
+            <!-- Dorm -> Academic -->
+            <path d="M 215 210 Q 240 160, 275 125" stroke="#0284c7" stroke-width="1.6" fill="none" marker-end="url(#arrow-blue)"/>
+            <rect x="228" y="152" width="36" height="14" rx="7" fill="#64748b"/>
+            <text x="246" y="162" font-size="7" font-weight="700" fill="#ffffff" text-anchor="middle">Transit</text>
+
+            <!-- Academic -> Dining -->
+            <path d="M 335 120 Q 400 160, 445 195" stroke="#0284c7" stroke-width="1.6" fill="none" marker-end="url(#arrow-blue)"/>
+            <rect x="375" y="155" width="38" height="14" rx="7" fill="#64748b"/>
+            <text x="394" y="165" font-size="7" font-weight="700" fill="#ffffff" text-anchor="middle">Generates</text>
+
+            <!-- Dorm -> Dining -->
+            <path d="M 235 245 L 420 225" stroke="#a855f7" stroke-width="2" stroke-dasharray="4 3" fill="none" marker-end="url(#arrow-blue)"/>
+            <rect x="310" y="228" width="40" height="14" rx="7" fill="#1e293b"/>
+            <text x="330" y="238" font-size="7" font-weight="700" fill="#fca5a5" text-anchor="middle">Supplies</text>
+
+            <!-- Dining -> Sports -->
+            <path d="M 525 205 Q 600 170, 645 135" stroke="#0284c7" stroke-width="1.6" fill="none" marker-end="url(#arrow-blue)"/>
+            <rect x="575" y="162" width="36" height="14" rx="7" fill="#64748b"/>
+            <text x="593" y="172" font-size="7" font-weight="700" fill="#ffffff" text-anchor="middle">Moves</text>
+
+            <!-- Sports -> Off-Campus -->
+            <path d="M 705 145 Q 750 200, 775 245" stroke="#0284c7" stroke-width="1.6" fill="none" marker-end="url(#arrow-blue)"/>
+            <rect x="732" y="190" width="36" height="14" rx="7" fill="#64748b"/>
+            <text x="750" y="200" font-size="7" font-weight="700" fill="#ffffff" text-anchor="middle">Entropy</text>
+
+            <!-- Function Pills -->
+            <rect x="110" y="150" width="46" height="17" rx="8.5" fill="#e0f2fe" stroke="#38bdf8"/>
+            <text x="133" y="161" font-size="7.5" font-weight="700" fill="#0369a1" text-anchor="middle">f Function</text>
+
+            <rect x="560" y="270" width="46" height="17" rx="8.5" fill="#e0f2fe" stroke="#38bdf8"/>
+            <text x="583" y="281" font-size="7.5" font-weight="700" fill="#0369a1" text-anchor="middle">f Function</text>
+
+            <rect x="740" y="80" width="56" height="17" rx="8.5" fill="#f3e8ff" stroke="#c084fc"/>
+            <text x="768" y="91" font-size="7.5" font-weight="700" fill="#7c3aed" text-anchor="middle">Automation</text>
+
+            <!-- Dotted connecting lines from cards into the nodes -->
+            <path d="M 30 250 L 125 240" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
+            <path d="M 930 180 L 845 250" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
+          </svg>
+
+          <!-- Hover Overlay Prompt to dive into Cosmograph -->
+          <div class="stage-hover-overlay">
+            <div class="hover-portal-badge">
+              <span>⚡ CLICK TO DIVE INTO COSMOGRAPH STAR MAP ↘</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Floating Card: Granular Access Controls -->
+        <div class="palantir-float-card card-right">
+          <div class="f-card-header">
+            <span class="f-card-tag">SECURITY ENCLAVE</span>
+            <span class="f-card-pill-blue">Granular Access</span>
+          </div>
+          <table class="access-table">
+            <thead>
+              <tr><th>ACTOR</th><th>ACCESS</th><th>POLICY</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="bold">Counselor</td><td>View</td><td class="policy-tag">Purpose: Care Triage</td></tr>
+              <tr><td class="bold">Clinician</td><td>Edit</td><td class="policy-tag">Role: Medical Channel</td></tr>
+              <tr><td class="bold">Sensor Agent</td><td>Query</td><td class="policy-tag">Marking: Zero-Raw-GPS</td></tr>
+            </tbody>
+          </table>
+          <div class="f-card-hint">
+            <span>* 符合高校数据安全与隐私合规要求</span>
+          </div>
+        </div>
+
+        <!-- Slab Center Bottom: [ ONTOLOGY SYSTEM ] and Platform Slabs -->
+        <div class="ontology-platform-slabs">
+          <div class="ontology-title-pill">
+            <span>ONTOLOGY SYSTEM</span>
+          </div>
+          <div class="slab-layer slab-1">
+            <div class="slab-col left">Objects · Properties · Links · Campus Graph Topologies...</div>
+            <div class="slab-col right">Scenarios · Proposals · Risk Ensembles · Branches...</div>
+          </div>
+          <div class="slab-layer slab-2">
+            <div class="slab-col left">Function-backed Actions · CA-Gate Webhooks · Real-time Triage Notifications...</div>
+            <div class="slab-col right">Full-spectrum Access Controls · Granular Policy Management · Auditing...</div>
+          </div>
+          <div class="slab-footer-caption">
+            <span>ANY STORAGE · ANY COMPUTE</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Connecting Bus Cables Downward -->
+      <section class="cables-to-base">
+        <svg viewBox="0 0 1100 40" preserveAspectRatio="none">
+          <line x1="140" y1="0" x2="140" y2="40" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <line x1="410" y1="0" x2="410" y2="40" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <line x1="680" y1="0" x2="680" y2="40" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <line x1="950" y1="0" x2="950" y2="40" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="2 2"/>
+        </svg>
+      </section>
+
+      <!-- Bottom Row: Four Foundation Chassis Units (DATA, LOGIC, MODELS, ACTIONS) -->
+      <section class="chassis-row">
+        
+        <!-- Chassis 1: DATA -->
+        <div class="chassis-wrapper">
+          <div class="chassis-box">
+            <div class="chassis-switches-grid">
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">TRANSACTIONS</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">IOT / SENSOR</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">GEOSPATIAL</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">UNSTRUCTURED</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">RELATIONAL</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">MORE..</span></div>
+            </div>
+          </div>
+          <div class="chassis-legs"></div>
+          <div class="chassis-title">DATA</div>
+        </div>
+
+        <!-- Chassis 2: LOGIC -->
+        <div class="chassis-wrapper">
+          <div class="chassis-box">
+            <div class="chassis-switches-grid">
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">FUNCTIONS / CODE</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">SCENARIOS</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">EVENT TRIGGERS</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">RULES</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">SCHEDULES</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">MORE..</span></div>
+            </div>
+          </div>
+          <div class="chassis-legs"></div>
+          <div class="chassis-title">LOGIC</div>
+        </div>
+
+        <!-- Chassis 3: MODELS -->
+        <div class="chassis-wrapper">
+          <div class="chassis-box highlight-chassis">
+            <div class="chassis-switches-grid">
+              <div class="chassis-item"><span class="toggle-icon active">●─</span><span class="label">OPEN WEIGHT</span></div>
+              <div class="chassis-item"><span class="toggle-icon active">●─</span><span class="label">PERCEPTION</span></div>
+              <div class="chassis-item"><span class="toggle-icon active">●─</span><span class="label">CLOSED WEIGHT</span></div>
+              <div class="chassis-item"><span class="toggle-icon active">●─</span><span class="label">TRADITIONAL ML</span></div>
+              <div class="chassis-item"><span class="toggle-icon active">●─</span><span class="label">MULTIMODAL</span></div>
+              <div class="chassis-item"><span class="toggle-icon active">●─</span><span class="label">MORE..</span></div>
+            </div>
+          </div>
+          <div class="chassis-legs"></div>
+          <div class="chassis-title">MODELS</div>
+        </div>
+
+        <!-- Chassis 4: ACTIONS -->
+        <div class="chassis-wrapper">
+          <div class="chassis-box">
+            <div class="chassis-switches-grid">
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">ERP</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">SCM</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">MES</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">SCHEDULING</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">EDGE</span></div>
+              <div class="chassis-item"><span class="toggle-icon">●─</span><span class="label">MORE..</span></div>
+            </div>
+          </div>
+          <div class="chassis-legs"></div>
+          <div class="chassis-title">ACTIONS</div>
+        </div>
+
+      </section>
 
     </div>
   </main>
@@ -393,257 +505,254 @@
 
   <!-- ================= VIEW 2: COSMOGRAPH TRAJECTORY GALAXY ================= -->
   <main class="view-panel" id="view-cosmograph" aria-label="Cosmograph 时空轨迹星图">
-    <div class="cosmograph-shell">
+    <div class="cg-viewport-root">
 
-      <!-- Cosmograph Top Header -->
-      <header class="cg-navbar">
-        <div class="cg-nav-left">
-          <span class="cg-logo">CG</span>
-          <span class="cg-pipe">/</span>
-          <span class="cg-title">Campus Trajectory Galaxy · 观微时空星图</span>
-          <span class="cg-pill">209 队列 · 11,850 轨迹点</span>
+      <!-- Cosmograph Exact Dark Navbar -->
+      <header class="cg-dark-header">
+        <div class="cg-h-left">
+          <span class="cg-logo-icon">CG</span>
+          <button type="button" class="cg-h-link">Clone</button>
+          <button type="button" class="cg-h-link">Share...</button>
         </div>
-        <div class="cg-nav-center">
-          <span class="cg-hint">支持鼠标左键拖拽平移、滚轮缩放、右键旋转；点击点云或左侧列表查看学生档案</span>
+
+        <div class="cg-h-center">
+          <span class="cg-project-title">Research</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
         </div>
-        <div class="cg-nav-right">
-          <button type="button" class="cg-btn" id="cg-btn-reset-view">自适应居中 (Fit)</button>
-          <button type="button" class="cg-btn" id="cg-btn-toggle-orbit">3D 轨道慢旋: 开</button>
-          <button type="button" class="cg-btn-primary" id="cg-btn-back-foundry">
-            <span>☀️ 返回架构全景</span>
+
+        <div class="cg-h-right">
+          <button type="button" class="cg-icon-btn" title="说明文档">📖</button>
+          <button type="button" class="cg-save-btn">☁ Save</button>
+          <div class="cg-user-avatar"></div>
+          <button type="button" class="cg-back-foundry-btn" id="btn-cg-back-foundry">
+            <span>☀️ Palantir Foundry</span>
           </button>
         </div>
       </header>
 
-      <!-- Main Layout: Left Filters Drawer + Center WebGL Canvas -->
-      <div class="cg-main-body">
+      <!-- Main Stage: Left Filter Drawer + Center WebGL Point Cloud -->
+      <div class="cg-stage-body">
 
-        <!-- Cosmograph Left Drawer (FILTERS) -->
-        <aside class="cg-drawer" id="cg-drawer">
-          <div class="drawer-header">
+        <!-- Cosmograph Left Filters Drawer (Exact recreation of Image 2) -->
+        <aside class="cg-filters-drawer" id="cg-filters-drawer">
+          <div class="cg-drawer-head">
             <div class="d-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
               </svg>
               <span>FILTERS</span>
             </div>
-            <div class="d-tools">
-              <button type="button" class="d-tool-btn" id="btn-reset-filters" title="重置全部筛选条件">重置</button>
-              <button type="button" class="d-tool-btn" id="btn-toggle-drawer" title="收起/展开抽屉">◂</button>
+            <div class="d-btns">
+              <button type="button" class="d-icon" id="btn-cg-add-filter" title="添加筛选">+</button>
+              <button type="button" class="d-icon" id="btn-cg-close-drawer" title="收起抽屉">✕</button>
             </div>
           </div>
 
-          <div class="drawer-scrollable">
-            <!-- Points Counter -->
-            <div class="drawer-section">
-              <div class="sec-label">POINTS</div>
-              <div class="counter-display">
-                <span class="big-num" id="active-points-count">11,850</span>
-                <span class="sub-label">/ 11,850 TOTAL (209 STUDENTS)</span>
+          <div class="cg-drawer-content">
+            
+            <!-- Category: POINTS -->
+            <div class="cg-filter-block">
+              <div class="block-title">^ POINTS</div>
+              <div class="add-filter-pill">
+                <span>+ Add filter</span>
+                <span class="arrow">v</span>
               </div>
             </div>
 
-            <!-- Micro Cluster Histogram (Functional Zones) -->
-            <div class="drawer-section">
-              <div class="sec-label">micro_cluster (校园功能区滞留分布)</div>
-              <div class="bar-histogram" id="cluster-histogram">
-                <!-- Dynamically populated bars -->
-              </div>
-            </div>
-
-            <!-- Size / Score Histogram -->
-            <div class="drawer-section">
-              <div class="sec-label">screening_score (心理危机预测分分布)</div>
-              <div class="score-histogram-wrap">
-                <div class="score-histogram" id="score-histogram">
-                  <!-- Dynamically populated score distribution bins -->
-                </div>
-                <div class="score-axis">
-                  <span>0.0 常态</span>
-                  <span>0.46 检出阈值</span>
-                  <span>0.70 高危</span>
-                  <span>1.0</span>
+            <!-- Histogram 1: micro_cluster -->
+            <div class="cg-filter-block">
+              <div class="block-header-row">
+                <span class="block-label">micro_cluster</span>
+                <div class="b-tools">
+                  <span class="gear">⚙</span>
+                  <span class="trash">🗑</span>
                 </div>
               </div>
-            </div>
-
-            <!-- Color (Behavior Phenotypes) - Cosmograph Legend -->
-            <div class="drawer-section">
-              <div class="sec-label">color (行为表型与风险聚类)</div>
-              <div class="legend-filter-list" id="legend-filter-list">
-                <button type="button" class="legend-btn active" data-phenotype="normal_mobility">
-                  <span class="legend-dot dot-yellow"></span>
-                  <span class="legend-name">常态校园健康流动 (Mobility)</span>
-                  <span class="legend-count">7,980</span>
-                </button>
-                <button type="button" class="legend-btn active" data-phenotype="retreat_high_risk">
-                  <span class="legend-dot dot-purple"></span>
-                  <span class="legend-name">宿舍高密退缩孤岛 (Dorm Retreat)</span>
-                  <span class="legend-count">770</span>
-                </button>
-                <button type="button" class="legend-btn active" data-phenotype="wavering_mid_risk">
-                  <span class="legend-dot dot-cyan"></span>
-                  <span class="legend-name">边缘学业生活波动 (Wavering)</span>
-                  <span class="legend-count">3,100</span>
-                </button>
+              <div class="range-axis-labels">
+                <span>1</span>
+                <span>4.5K</span>
+              </div>
+              <!-- 12 Histogram Bars matching Image 2 -->
+              <div class="cg-histogram-bars" id="cg-micro-bars">
+                <!-- Dynamically populated -->
               </div>
             </div>
 
-            <!-- Student Search & List -->
-            <div class="drawer-section student-list-section">
-              <div class="sec-label">STUDENTS 检索个案 (209 人)</div>
-              <div class="student-search-box">
-                <input type="text" id="cg-student-search" placeholder="输入匿名 UID 检索..." autocomplete="off">
+            <!-- Histogram 2: size (n_cits / intensity) -->
+            <div class="cg-filter-block">
+              <div class="block-header-row">
+                <span class="block-label">size (n_cits)</span>
               </div>
-              <div class="student-quick-list" id="cg-student-list">
-                <!-- Populated dynamically -->
+              <div class="range-axis-labels">
+                <span>300</span>
+                <span>138K</span>
+              </div>
+              <div class="cg-histogram-bars power-law" id="cg-size-bars">
+                <!-- Dynamically populated -->
               </div>
             </div>
+
+            <!-- Color Breakdown (main_field) -->
+            <div class="cg-filter-block">
+              <div class="block-header-row">
+                <span class="block-label">color (main_field)</span>
+              </div>
+              <div class="cg-search-field">
+                <input type="text" id="cg-category-search" placeholder="Search..." autocomplete="off">
+              </div>
+              <div class="cg-color-category-list" id="cg-color-list">
+                <div class="cg-color-item active" data-phenotype="normal_mobility">
+                  <span class="c-dot dot-yellow"></span>
+                  <span class="c-name">Biomedical and health sciences</span>
+                  <span class="c-count">165K</span>
+                </div>
+                <div class="cg-color-item active" data-phenotype="retreat_high_risk">
+                  <span class="c-dot dot-purple"></span>
+                  <span class="c-name">Physical sciences and engineering</span>
+                  <span class="c-count">78K</span>
+                </div>
+                <div class="cg-color-item active" data-phenotype="wavering_mid_risk">
+                  <span class="c-dot dot-cyan"></span>
+                  <span class="c-name">Social sciences and humanities</span>
+                  <span class="c-count">43K</span>
+                </div>
+                <div class="cg-color-item active" data-phenotype="normal_mobility">
+                  <span class="c-dot dot-magenta"></span>
+                  <span class="c-name">Life and earth sciences</span>
+                  <span class="c-count">35K</span>
+                </div>
+                <div class="cg-color-item active" data-phenotype="wavering_mid_risk">
+                  <span class="c-dot dot-blue"></span>
+                  <span class="c-name">Mathematics and computer science</span>
+                  <span class="c-count">32K</span>
+                </div>
+              </div>
+              <div class="cg-category-footer">
+                <div class="sort-actions">
+                  <span>↑ ABC</span>
+                  <span>↓ 123</span>
+                </div>
+                <button type="button" class="btn-reset-selection" id="btn-reset-categories">reset selection</button>
+              </div>
+            </div>
+
+            <!-- Student Quick Search List -->
+            <div class="cg-filter-block student-search-block">
+              <div class="block-title">STUDENTS (209 人队列)</div>
+              <input type="text" id="cg-uid-input" class="cg-uid-input" placeholder="输入匿名 UID 检索..." autocomplete="off">
+              <div class="cg-student-scroll-list" id="cg-student-scroll-list">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
           </div>
         </aside>
 
         <!-- Center WebGL 3D Point Cloud Canvas Area -->
-        <div class="cg-canvas-container" id="cg-canvas-container">
-          <!-- WebGL Canvas injected here by scene3d.js -->
+        <div class="cg-canvas-viewport" id="cg-canvas-viewport">
+          <!-- WebGL Renderer injected here -->
+          <div id="cg-canvas-container" class="cg-canvas-container"></div>
 
-          <!-- Floating Research Paper Labels (Faithful to Image 2) -->
-          <div class="cg-annotations-layer" id="cg-annotations-layer">
-            <div class="cg-annotation-card tag-dorm" id="tag-dorm">
-              <div class="tag-pin"></div>
-              <div class="tag-body">
-                <span class="tag-title">高危退缩孤岛：南区宿舍群异常滞留簇</span>
-                <span class="tag-stat">14 人高分 · 日均 18.3h · 空间熵 -2.18σ</span>
-              </div>
-            </div>
-
-            <div class="cg-annotation-card tag-library" id="tag-library">
-              <div class="tag-pin"></div>
-              <div class="tag-body">
-                <span class="tag-title">学术中枢：总图书馆与综合教学群</span>
-                <span class="tag-stat">常态活跃 · 日均 7.4h · 规律性学业流动</span>
-              </div>
-            </div>
-
-            <div class="cg-annotation-card tag-canteen" id="tag-canteen">
-              <div class="tag-pin"></div>
-              <div class="tag-body">
-                <span class="tag-title">生活漫游：西区生活广场与餐饮步行带</span>
-                <span class="tag-stat">午/晚餐高密脉冲流动 · 聚集性社交</span>
-              </div>
-            </div>
-
-            <div class="cg-annotation-card tag-night" id="tag-night">
-              <div class="tag-pin"></div>
-              <div class="tag-body">
-                <span class="tag-title">时空异动：深夜 02:00-05:00 屏幕点亮偏离带</span>
-                <span class="tag-stat">昼夜节律紊乱 · 点亮偏离 +2.05σ</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cosmograph Bottom Timeline Bar -->
-          <div class="cg-timeline-bar" id="cg-timeline-bar">
-            <button type="button" class="cg-play-btn" id="btn-play-timeline" title="播放 56 天轨迹动态演变">
-              <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="5 3 19 12 5 21 5 3"/>
+          <!-- Top-Left Navigation Tools -->
+          <div class="cg-top-tools">
+            <button type="button" class="cg-tool-pill" id="cg-tool-fit">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
               </svg>
-              <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-                <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
-              </svg>
+              <span>Fit view</span>
             </button>
-
-            <div class="timeline-slider-wrap">
-              <div class="timeline-spark-bars" id="timeline-bars">
-                <!-- 56 days mini activity bars -->
-              </div>
-              <input type="range" id="timeline-scrubber" min="1" max="56" value="56" step="1">
-              <div class="timeline-ticks">
-                <span>Day 1 (入学初)</span>
-                <span>Day 14 (第2周)</span>
-                <span>Day 28 (第4周)</span>
-                <span>Day 42 (第6周)</span>
-                <span>Day 56 (第8周末)</span>
-              </div>
-            </div>
-
-            <div class="timeline-day-readout">
-              <span class="day-val" id="timeline-day-display">Day 56</span>
-              <span class="day-label">全学期轨迹累计</span>
+            <button type="button" class="cg-tool-pill" id="cg-tool-select">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/>
+              </svg>
+              <span>Select area</span>
+            </button>
+            <div class="cg-zoom-pair">
+              <button type="button" class="cg-zoom-btn" id="cg-zoom-in">+</button>
+              <button type="button" class="cg-zoom-btn" id="cg-zoom-out">-</button>
             </div>
           </div>
 
-          <!-- Student Profile Drawer (Slides in on student selection) -->
-          <div class="cg-profile-flyout" id="cg-profile-flyout">
-            <div class="flyout-header">
-              <div class="f-user">
-                <span class="avatar-tag" id="flyout-avatar">6C</span>
-                <div>
-                  <h3 id="flyout-uid">UID: 6c4cf487</h3>
-                  <span class="flyout-tier-badge" id="flyout-tier">高分预警 (红色)</span>
-                </div>
-              </div>
-              <button type="button" class="flyout-close" id="btn-close-flyout">×</button>
+          <!-- Floating Scientific Paper Labels (Exact recreation of Image 2) -->
+          <div class="cg-paper-labels-layer">
+            <div class="cg-paper-tag tag-1" id="tag-paper-1">
+              <span>SARS-CoV-2 Cell Entry Depends on ACE2 and TMP...</span>
             </div>
+            <div class="cg-paper-tag tag-2" id="tag-paper-2">
+              <span>Clinical features of patients infected with 2019 novel...</span>
+            </div>
+            <div class="cg-paper-tag tag-3" id="tag-paper-3">
+              <span>Moderated estimation of fold change and dispersio...</span>
+            </div>
+            <div class="cg-paper-tag tag-4" id="tag-paper-4">
+              <span>Trimmomatic: a flexible trimmer for Illumina sequen...</span>
+            </div>
+            <div class="cg-paper-tag tag-5" id="tag-paper-5">
+              <span>RAxML version 8: a tool for phylogenetic analysis a...</span>
+            </div>
+            <div class="cg-paper-tag tag-6" id="tag-paper-6">
+              <span>Delphi Technique in Health Sciences: A Map</span>
+            </div>
+          </div>
 
-            <div class="flyout-body">
-              <div class="flyout-score-box">
-                <div class="score-metric">
-                  <span>模型危机预测分</span>
-                  <strong class="red-text" id="flyout-score">0.731</strong>
-                  <small>检出阈值: 0.46</small>
-                </div>
-                <div class="quality-metric">
-                  <span>CA-Gate 采集置信度</span>
-                  <strong class="safe-text" id="flyout-quality">记录充分</strong>
-                  <small>权重: 1.0 (56天完备)</small>
-                </div>
+          <!-- Bottom Cosmograph Timeline Bar -->
+          <div class="cg-timeline-bar-dark">
+            <button type="button" class="cg-timeline-play" id="btn-timeline-play" title="播放时间演变">▶</button>
+            <div class="timeline-slider-track">
+              <div class="timeline-histogram-wave" id="timeline-wave-bars">
+                <!-- 56 days waveform bars -->
               </div>
+              <input type="range" id="cg-timeline-range" min="1" max="56" value="56" step="1">
+              <div class="timeline-year-ticks">
+                <span>1999 (Day 1)</span>
+                <span>2002</span>
+                <span>2005 (Day 14)</span>
+                <span>2007</span>
+                <span>2010 (Day 28)</span>
+                <span>2013</span>
+                <span>2015 (Day 42)</span>
+                <span>2018</span>
+                <span>2021 (Day 56)</span>
+              </div>
+            </div>
+            <div class="cg-timeline-caption">
+              <div class="right-stats">
+                <span>308 and less</span>
+                <span>1.5K and more</span>
+              </div>
+              <span class="credit">visualized by Cosmograph.app</span>
+            </div>
+          </div>
 
-              <!-- 3-Channel Deviation Radar / Bars -->
-              <div class="flyout-deviations">
-                <div class="dev-title">三通道真实行为偏离 (Z-Score)</div>
-                <div class="dev-item">
-                  <div class="dev-head">
-                    <span>居住地点驻留 (空间通道)</span>
-                    <strong id="flyout-res-val">18.34 h/日 (+1.84σ)</strong>
-                  </div>
-                  <div class="dev-bar-bg"><div class="dev-bar-fill red" id="flyout-res-bar" style="width: 82%;"></div></div>
-                </div>
-                <div class="dev-item">
-                  <div class="dev-head">
-                    <span>学习地点驻留 (学业通道)</span>
-                    <strong id="flyout-study-val">2.60 h/日 (-1.21σ)</strong>
-                  </div>
-                  <div class="dev-bar-bg"><div class="dev-bar-fill blue" id="flyout-study-bar" style="width: 25%;"></div></div>
-                </div>
-                <div class="dev-item">
-                  <div class="dev-head">
-                    <span>夜间手机点亮 (节律通道)</span>
-                    <strong id="flyout-night-val">22.2 次/夜 (+2.05σ)</strong>
-                  </div>
-                  <div class="dev-bar-bg"><div class="dev-bar-fill red" id="flyout-night-bar" style="width: 78%;"></div></div>
-                </div>
+          <!-- Student Profile Flyout Drawer -->
+          <div class="cg-flyout-panel" id="cg-flyout-panel">
+            <div class="flyout-head">
+              <div>
+                <h3 id="flyout-uid-text">UID: 6c4cf487</h3>
+                <span class="f-badge" id="flyout-tier-badge">高分预警 (红色)</span>
               </div>
-
-              <!-- LLM Counselor Diagnosis Report -->
-              <div class="flyout-report-box">
-                <div class="report-head">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                  </svg>
-                  <span>大模型辅导员智能研判意见</span>
-                </div>
-                <div class="report-text" id="flyout-report-text">
-                  【时空行为画像】该生近 56 天日均宿舍滞留高达 18.34 小时，且随学期推移呈现典型的“孤岛化退缩”；夜间频繁点亮手机，显示睡眠节律紊乱。<br><br>
-                  【干预建议】建议辅导员协同心理中心，以“学业帮扶/选课沟通”为非侵入切入点开展面对面交流，避免直接提及“心理危机预警”以免触发防卫心理。
-                </div>
+              <button type="button" class="flyout-x" id="btn-close-cg-flyout">✕</button>
+            </div>
+            <div class="flyout-content">
+              <div class="score-card">
+                <div><span>危机筛查分</span><strong class="red" id="flyout-score-val">0.731</strong></div>
+                <div><span>CA-Gate 审计</span><strong class="green" id="flyout-quality-val">充分 (1.0)</strong></div>
               </div>
-
-              <!-- Action Buttons -->
-              <div class="flyout-actions">
-                <button type="button" class="btn-action-primary" id="btn-flyout-follow">纳入重点关怀名单</button>
-                <button type="button" class="btn-action-secondary" id="btn-flyout-focus">镜头聚焦轨迹</button>
+              <div class="dev-list">
+                <div class="dev-row"><span>居住驻留:</span><strong id="f-dev-res">18.34 h/日 (+1.84σ)</strong></div>
+                <div class="dev-row"><span>学习驻留:</span><strong id="f-dev-study">2.60 h/日 (-1.21σ)</strong></div>
+                <div class="dev-row"><span>夜间点亮:</span><strong id="f-dev-night">22.2 次/夜 (+2.05σ)</strong></div>
               </div>
+              <div class="llm-advice-box">
+                <div class="llm-title">大模型辅导员研判建议</div>
+                <p id="f-llm-text">
+                  【时空画像】该生近 56 天日均宿舍滞留高达 18.34 小时，且随学期推移呈现典型的“孤岛化退缩”；夜间点亮偏高，睡眠节律紊乱。<br><br>
+                  【关怀切入】建议以“学业选课沟通/生活困难走访”为由开展非侵入交流，避免直接提及“心理预警”。
+                </p>
+              </div>
+              <button type="button" class="btn-focus-pt" id="btn-focus-student-pt">聚焦轨迹星图 ↗</button>
             </div>
           </div>
 
@@ -657,56 +766,27 @@
 
   <!-- ================= VIEW 3: CASE RECORDS WORKBENCH ================= -->
   <main class="view-panel" id="view-cases" aria-label="个案研判工作台">
-    <div class="cases-container">
-      <header class="section-topbar">
-        <div>
-          <h2>209 名学生档案与阶梯干预工作台</h2>
-          <p>基于真实 CES 脱敏队列 · 支持多维检索、数据质量审计与闭环跟进演练</p>
-        </div>
-        <div class="cases-counters">
-          <span class="badge red">高危预警: 14 人</span>
-          <span class="badge orange">中危关注: 62 人</span>
-          <span class="badge green">常态观察: 133 人</span>
-          <span class="badge gray">CA-Gate 完备: 199 人</span>
-        </div>
+    <div class="palantir-plain-page">
+      <header class="page-top-title">
+        <h2>209 名学生档案与阶梯干预工作台</h2>
+        <p>基于真实 CES 脱敏队列 · 支持多维检索、数据质量审计与闭环跟进演练</p>
       </header>
 
-      <div class="cases-layout">
-        <!-- Sidebar filters & list -->
-        <div class="cases-sidebar">
-          <div class="filter-row">
-            <input type="text" id="cases-search" placeholder="搜索匿名 UID..." autocomplete="off">
-            <select id="cases-tier-filter">
-              <option value="all">全部分数梯队</option>
-              <option value="red">高分区间 (Red, 14人)</option>
-              <option value="orange">中分区间 (Orange, 62人)</option>
-              <option value="green">常态观察 (Green, 133人)</option>
-            </select>
-          </div>
-          <div class="cases-table-wrap">
-            <table class="cases-table" id="cases-main-table">
-              <thead>
-                <tr>
-                  <th>匿名编号</th>
-                  <th>危机评分</th>
-                  <th>梯队</th>
-                  <th>置信度</th>
-                  <th>宿舍驻留</th>
-                  <th>学习驻留</th>
-                  <th>夜间解锁</th>
-                </tr>
-              </thead>
-              <tbody id="cases-table-body">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Case Detail Full Card -->
-        <div class="cases-detail-pane" id="cases-detail-pane">
-          <!-- Populated dynamically -->
-        </div>
+      <div class="plain-table-wrap">
+        <table class="plain-data-table" id="cases-plain-table">
+          <thead>
+            <tr>
+              <th>匿名编号</th>
+              <th>模型评分</th>
+              <th>预警梯队</th>
+              <th>CA-Gate 置信度</th>
+              <th>居住驻留</th>
+              <th>学习驻留</th>
+              <th>夜间点亮</th>
+            </tr>
+          </thead>
+          <tbody id="cases-plain-tbody"></tbody>
+        </table>
       </div>
     </div>
   </main>
@@ -714,71 +794,14 @@
 
   <!-- ================= VIEW 4: RESEARCH & ABLATION BENCHMARK ================= -->
   <main class="view-panel" id="view-research" aria-label="实验基准与消融验证">
-    <div class="research-container">
-      <header class="section-topbar">
-        <div>
-          <h2>MCH 多通道模型架构与 5 折交叉验证基准</h2>
-          <p>严格基于 College Experience Study (N=209) · 550 次独立随机重复评估</p>
-        </div>
-        <div class="research-status-pill">
-          <span>完整消融实验已固化存证 · 避免单次过拟合</span>
-        </div>
+    <div class="palantir-plain-page">
+      <header class="page-top-title">
+        <h2>MCH 多通道模型架构与 5 折交叉验证基准</h2>
+        <p>严格基于 College Experience Study (N=209) · 550 次独立随机重复评估</p>
       </header>
 
-      <!-- Grid of ablation comparison -->
-      <div class="research-grid">
-        <div class="research-card">
-          <div class="r-badge highlight">完整方案 (Full MCH + CA-Gate)</div>
-          <h3>多通道协同融合模型</h3>
-          <p>时序自监督 (Ch1) + 校园时空图 (Ch2) + 隐表型分解 (Ch3) + CA-Gate 置信度加权</p>
-          <div class="metric-highlight">
-            <div class="m-val"><strong>0.632</strong><span>ROC-AUC</span></div>
-            <div class="m-val"><strong class="red-text">73.8%</strong><span>阳性检出率 (@0.46)</span></div>
-            <div class="m-val"><strong>199/209</strong><span>高置信度样本</span></div>
-          </div>
-          <div class="r-desc">
-            在保持群体公平性的前提下，将传统基线的 43.8% 检出率提升至 73.8%，有效解决学生夜间不规则活动与传感器断网丢失的稀疏挑战。
-          </div>
-        </div>
-
-        <div class="research-card">
-          <div class="r-badge">消融对照组 A</div>
-          <h3>去除通道 1 (Without Ch1 时序增强)</h3>
-          <p>仅保留时空图与隐表型，移除高斯抖动与时序重排</p>
-          <div class="metric-highlight">
-            <div class="m-val"><strong>0.548</strong><span>ROC-AUC</span></div>
-            <div class="m-val"><strong>-0.084</strong><span>性能衰减</span></div>
-          </div>
-          <div class="r-desc">证明传感器离散噪声抖动在时序表征中的不变性对于捕捉学生不规则作息具有显著抗噪作用。</div>
-        </div>
-
-        <div class="research-card">
-          <div class="r-badge">消融对照组 B</div>
-          <h3>去除通道 2 (Without Ch2 时空图增强)</h3>
-          <p>移除转移图拓扑、高斯模糊平滑与功能区掩码</p>
-          <div class="metric-highlight">
-            <div class="m-val"><strong>0.530</strong><span>ROC-AUC</span></div>
-            <div class="m-val"><strong class="red-text">-0.102</strong><span>最大性能衰减</span></div>
-          </div>
-          <div class="r-desc">证明校园功能区转移拓扑与空间熵是本模型最重要的核心表征，缺失后检出率大幅滑坡。</div>
-        </div>
-
-        <div class="research-card">
-          <div class="r-badge">消融对照组 C</div>
-          <h3>去除通道 3 (Without Ch3 推荐分解)</h3>
-          <p>移除基于 TruncatedSVD 的协同过滤群体补偿</p>
-          <div class="metric-highlight">
-            <div class="m-val"><strong>0.539</strong><span>ROC-AUC</span></div>
-            <div class="m-val"><strong>-0.093</strong><span>性能衰减</span></div>
-          </div>
-          <div class="r-desc">证明冷启动与传感器间歇性断连必须通过群体共性隐语义进行插补补偿。</div>
-        </div>
-      </div>
-
-      <!-- Confusion Matrix & Threshold Tradeoff -->
-      <div class="benchmark-table-box">
-        <h3>5 折交叉验证详细指标清单 (Mean ± Std)</h3>
-        <table class="benchmark-table">
+      <div class="plain-table-wrap">
+        <table class="plain-data-table">
           <thead>
             <tr>
               <th>模型方案</th>
@@ -786,17 +809,17 @@
               <th>阳性检出召回 (Recall)</th>
               <th>阴性特异度 (Specificity)</th>
               <th>Balanced Accuracy</th>
-              <th>Brier 分数 (校准度)</th>
+              <th>Brier 分数</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="highlight-row">
-              <td><strong>MCH Full Pipeline (完整模型)</strong></td>
-              <td><strong>0.632 ± 0.041</strong></td>
-              <td><strong>73.8% (阈值 0.46)</strong></td>
-              <td><strong>61.0% ± 0.08</strong></td>
-              <td><strong>0.592 ± 0.048</strong></td>
-              <td><strong>0.246 ± 0.012</strong></td>
+            <tr style="background:#f0fdf4; font-weight:700;">
+              <td>MCH Full Pipeline (完整模型)</td>
+              <td>0.632 ± 0.041</td>
+              <td>73.8% (阈值 0.46)</td>
+              <td>61.0% ± 0.08</td>
+              <td>0.592 ± 0.048</td>
+              <td>0.246 ± 0.012</td>
             </tr>
             <tr>
               <td>Without Ch1 (无时序自监督)</td>

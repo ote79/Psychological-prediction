@@ -1,6 +1,6 @@
 /**
  * APPLICATION ORCHESTRATOR (APP.JS)
- * Coordinates View Transitions, Cosmograph WebGL Engine, State, and Events.
+ * Controls 1:1 view switching between Palantir Foundry and Cosmograph.
  */
 (() => {
   "use strict";
@@ -15,8 +15,8 @@
   function setView(viewName, targetUid = null) {
     currentView = viewName;
 
-    // 1. Update Navigation Tab Buttons
-    document.querySelectorAll(".tab-btn").forEach(btn => {
+    // 1. Update Top Switcher Buttons
+    document.querySelectorAll(".view-switch-btn").forEach(btn => {
       if (btn.dataset.view === viewName) {
         btn.classList.add("active");
       } else {
@@ -33,9 +33,9 @@
       }
     });
 
-    // 3. Update Body Class for Theming
+    // 3. Theme-specific adjustments
     if (viewName === "cosmograph") {
-      document.body.className = "mode-cosmograph";
+      document.body.className = "theme-cosmograph";
       if (c3d) {
         setTimeout(() => {
           c3d.resize();
@@ -44,25 +44,20 @@
             c3d.focusStudent(targetUid);
             visuals.renderStudentFlyout(targetUid);
           }
-        }, 50);
+        }, 30);
       }
     } else {
-      document.body.className = "mode-foundry";
-    }
-
-    if (viewName === "cases") {
-      visuals.renderCaseDetailPane(targetUid || selectedUid);
+      document.body.className = "theme-foundry";
     }
 
     window.scrollTo({ top: 0, behavior: "auto" });
   }
 
   function initApp() {
-    // 1. Initialize Cosmograph 3D Scene in background
+    // 1. Initialize Cosmograph 3D Engine
     if (c3d) {
       c3d.init("cg-canvas-container");
 
-      // Bind selection callback from 3D raycast click
       c3d.setSelectCallback(uid => {
         selectedUid = uid;
         c3d.focusStudent(uid);
@@ -70,20 +65,10 @@
       });
     }
 
-    // 2. Render Cosmograph Controls & Drawer
+    // 2. Render Cosmograph Controls
     visuals.renderCosmographDrawer({
-      onZoneFilter: (zone) => {
-        // Find cluster center and pan camera
-        const trajectoryData = window.CAMPUS_TRAJECTORIES;
-        if (trajectoryData?.metadata?.centers?.[zone]) {
-          // Can focus zone
-        }
-      },
-      onScoreFilter: (minScore, maxScore) => {
-        if (c3d) c3d.filterByScoreRange(minScore, maxScore);
-      },
-      onPhenotypeFilter: (activePhenotypeSet) => {
-        if (c3d) c3d.filterByPhenotype(activePhenotypeSet);
+      onPhenotypeFilter: (set) => {
+        if (c3d) c3d.filterByPhenotype(set);
       },
       onSelectStudent: (uid) => {
         selectedUid = uid;
@@ -92,133 +77,88 @@
       }
     });
 
-    // 3. Render Timeline Scrubber
+    // 3. Render Timeline
     visuals.renderCosmographTimeline((day) => {
       if (c3d) c3d.filterByDay(day);
     });
 
-    // 4. Render Cases Table
+    // 4. Render Table
     visuals.renderCasesTable((uid) => {
       selectedUid = uid;
-      visuals.renderCaseDetailPane(uid);
+      setView("cosmograph", uid);
     });
 
-    // 5. Setup View Switching Click Events
-    document.querySelectorAll("[data-view]").forEach(btn => {
+    // 5. Navigation Tab Click Events
+    document.querySelectorAll(".view-switch-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         setView(btn.dataset.view);
       });
     });
 
-    // 6. Direct Portal Dive into Cosmograph
-    const btnDive = document.getElementById("portal-dive");
-    if (btnDive) {
-      btnDive.addEventListener("click", () => {
+    // 6. Direct Click on the Ontology Platform to Dive into Cosmograph
+    const ontologyStage = document.getElementById("ontology-master-stage");
+    if (ontologyStage) {
+      ontologyStage.addEventListener("click", () => {
         setView("cosmograph");
       });
     }
 
-    const btnQuickDive = document.getElementById("btn-dive-cosmograph");
-    if (btnQuickDive) {
-      btnQuickDive.addEventListener("click", () => {
+    const btnQuickStart = document.getElementById("btn-quick-launch-star");
+    if (btnQuickStart) {
+      btnQuickStart.addEventListener("click", () => {
         setView("cosmograph");
       });
     }
 
-    const btnBackFoundry = document.getElementById("cg-btn-back-foundry");
+    // 7. Cosmograph Back Button
+    const btnBackFoundry = document.getElementById("btn-cg-back-foundry");
     if (btnBackFoundry) {
       btnBackFoundry.addEventListener("click", () => {
         setView("foundry");
       });
     }
 
-    // 7. Cosmograph Top Controls
-    const btnResetView = document.getElementById("cg-btn-reset-view");
-    if (btnResetView) {
-      btnResetView.addEventListener("click", () => {
-        if (c3d) c3d.resetView();
-        const flyout = document.getElementById("cg-profile-flyout");
-        if (flyout) flyout.classList.remove("open");
+    // 8. Cosmograph Viewport Controls (Fit view, zoom)
+    const btnFit = document.getElementById("cg-tool-fit");
+    if (btnFit && c3d) {
+      btnFit.addEventListener("click", () => c3d.resetView());
+    }
+
+    const zoomIn = document.getElementById("cg-zoom-in");
+    const zoomOut = document.getElementById("cg-zoom-out");
+    if (zoomIn) {
+      zoomIn.addEventListener("click", () => {
+        // Zoom in event
       });
     }
 
-    const btnResetFilters = document.getElementById("btn-reset-filters");
-    if (btnResetFilters) {
-      btnResetFilters.addEventListener("click", () => {
-        if (c3d) c3d.resetView();
-        visuals.renderCosmographDrawer({
-          onScoreFilter: (min, max) => c3d && c3d.filterByScoreRange(min, max),
-          onPhenotypeFilter: (set) => c3d && c3d.filterByPhenotype(set),
-          onSelectStudent: (uid) => {
-            selectedUid = uid;
-            if (c3d) c3d.focusStudent(uid);
-            visuals.renderStudentFlyout(uid);
-          }
-        });
-      });
-    }
-
-    const btnToggleOrbit = document.getElementById("cg-btn-toggle-orbit");
-    if (btnToggleOrbit) {
-      btnToggleOrbit.addEventListener("click", () => {
-        if (c3d) {
-          const orbiting = c3d.toggleOrbit();
-          btnToggleOrbit.textContent = `3D 轨道慢旋: ${orbiting ? "开" : "关"}`;
-        }
-      });
-    }
-
-    const btnToggleDrawer = document.getElementById("btn-toggle-drawer");
-    const drawer = document.getElementById("cg-drawer");
-    if (btnToggleDrawer && drawer) {
-      btnToggleDrawer.addEventListener("click", () => {
-        drawer.classList.toggle("collapsed");
-        btnToggleDrawer.textContent = drawer.classList.contains("collapsed") ? "▸" : "◂";
-        setTimeout(() => c3d && c3d.resize(), 260);
-      });
-    }
-
-    // 8. Profile Flyout Close & Actions
-    const btnCloseFlyout = document.getElementById("btn-close-flyout");
+    // 9. Profile Flyout Controls
+    const btnCloseFlyout = document.getElementById("btn-close-cg-flyout");
     if (btnCloseFlyout) {
       btnCloseFlyout.addEventListener("click", () => {
-        const flyout = document.getElementById("cg-profile-flyout");
+        const flyout = document.getElementById("cg-flyout-panel");
         if (flyout) flyout.classList.remove("open");
         if (c3d) c3d.focusStudent(null);
       });
     }
 
-    const btnFlyoutFocus = document.getElementById("btn-flyout-focus");
-    if (btnFlyoutFocus) {
-      btnFlyoutFocus.addEventListener("click", () => {
-        if (c3d && selectedUid) c3d.focusStudent(selectedUid);
+    const btnFocusStudent = document.getElementById("btn-focus-student-pt");
+    if (btnFocusStudent && c3d) {
+      btnFocusStudent.addEventListener("click", () => {
+        if (selectedUid) c3d.focusStudent(selectedUid);
       });
     }
 
-    const btnFlyoutFollow = document.getElementById("btn-flyout-follow");
-    if (btnFlyoutFollow) {
-      btnFlyoutFollow.addEventListener("click", () => {
-        btnFlyoutFollow.textContent = "已纳入重点关怀名单 ✓";
-        btnFlyoutFollow.style.background = "#16a34a";
-      });
-    }
-
-    // 9. Node Clicks on Foundry Ontology Platform
-    document.querySelectorAll(".iso-node").forEach(node => {
-      node.addEventListener("click", () => {
-        const zone = node.dataset.zone;
-        setView("cosmograph");
+    // 10. Floating Paper Tags Hover / Click
+    document.querySelectorAll(".cg-paper-tag").forEach(tag => {
+      tag.addEventListener("click", () => {
+        // Focus high risk cluster
+        if (c3d) c3d.focusStudent("6c4cf487");
+        visuals.renderStudentFlyout("6c4cf487");
       });
     });
 
-    // 10. Listen to custom navigation events
-    document.addEventListener("app:navigate", (e) => {
-      if (e.detail?.view) {
-        setView(e.detail.view, e.detail.uid);
-      }
-    });
-
-    // 11. Keyboard Shortcuts
+    // 11. Keyboard Shortcuts (1: Foundry, 2: Cosmograph, 3: Cases, 4: Research, Esc: Close)
     window.addEventListener("keydown", (e) => {
       if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
 
@@ -227,17 +167,16 @@
       else if (e.key === "3") setView("cases");
       else if (e.key === "4") setView("research");
       else if (e.key === "Escape") {
-        const flyout = document.getElementById("cg-profile-flyout");
+        const flyout = document.getElementById("cg-flyout-panel");
         if (flyout) flyout.classList.remove("open");
         if (c3d) c3d.focusStudent(null);
       }
     });
 
-    // Initial View setup
+    // Default view
     setView("foundry");
   }
 
-  // Launch when DOM is ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initApp);
   } else {

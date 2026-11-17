@@ -69,8 +69,8 @@
 
     const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
     grad.addColorStop(0.0, "rgba(255, 255, 255, 1.0)");
-    grad.addColorStop(0.2, "rgba(255, 255, 255, 0.85)");
-    grad.addColorStop(0.5, "rgba(255, 220, 160, 0.4)");
+    grad.addColorStop(0.25, "rgba(255, 255, 255, 0.85)");
+    grad.addColorStop(0.6, "rgba(255, 255, 255, 0.25)");
     grad.addColorStop(1.0, "rgba(0, 0, 0, 0.0)");
 
     ctx.fillStyle = grad;
@@ -91,7 +91,6 @@
     // 1. Scene & Camera
     scene = new T.Scene();
     scene.background = new T.Color(0x07090e);
-    scene.fog = new T.FogExp2(0x07090e, 0.0035);
 
     camera = new T.PerspectiveCamera(48, width / height, 1, 2000);
     camera.position.set(0, 95, cameraDistance);
@@ -126,9 +125,11 @@
     // Subtle campus boundary ground ring & functional zones
     const groundGroup = new T.Group();
 
-    // Grid plane
-    const grid = new T.GridHelper(260, 26, 0x1e293b, 0x0f172a);
+    // Grid plane (subtle cosmic coordinates)
+    const grid = new T.GridHelper(300, 30, 0x161b22, 0x0d1117);
     grid.position.y = -6;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.25;
     groundGroup.add(grid);
 
     // Add glowing footprint circles for each campus zone
@@ -218,14 +219,14 @@
     originalColors = colors.slice();
 
     geometry = new T.BufferGeometry();
-    geometry.setAttribute("position", new T.BufferAttribute(positions, 3));
-    geometry.setAttribute("color", new T.BufferAttribute(colors, 3));
+    geometry.setAttribute("position", new T.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
 
     const material = new T.PointsMaterial({
       size: 4.2,
       map: createGlowSprite(),
       vertexColors: true,
-      blending: T.AdditiveBlending,
+      blending: 2, // AdditiveBlending
       depthTest: false,
       transparent: true,
       opacity: 0.88
