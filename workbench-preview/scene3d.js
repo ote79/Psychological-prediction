@@ -69,8 +69,8 @@
 
     const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
     grad.addColorStop(0.0, "rgba(255, 255, 255, 1.0)");
-    grad.addColorStop(0.25, "rgba(255, 255, 255, 0.85)");
-    grad.addColorStop(0.6, "rgba(255, 255, 255, 0.25)");
+    grad.addColorStop(0.2, "rgba(255, 255, 255, 0.65)");
+    grad.addColorStop(0.5, "rgba(255, 255, 255, 0.18)");
     grad.addColorStop(1.0, "rgba(0, 0, 0, 0.0)");
 
     ctx.fillStyle = grad;
@@ -223,13 +223,13 @@
     geometry.setAttribute("color", new T.Float32BufferAttribute(colors, 3));
 
     const material = new T.PointsMaterial({
-      size: 4.2,
+      size: 2.2,
       map: createGlowSprite(),
       vertexColors: true,
       blending: 2, // AdditiveBlending
       depthTest: false,
       transparent: true,
-      opacity: 0.88
+      opacity: 0.80
     });
 
     pointsMesh = new T.Points(geometry, material);
