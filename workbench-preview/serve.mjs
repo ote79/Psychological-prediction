@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const directory = path.dirname(fileURLToPath(import.meta.url));
 const port = Number(process.argv[2] || 4173);
-const files = new Set(["index.html", "ui.css", "app.js", "visuals.js", "scene3d.js", "three-runtime.js", "data.js"]);
+const files = new Set(["index.html", "ui.css", "app.js", "visuals.js", "scene3d.js", "three-runtime.js", "data.js", "trajectories.js"]);
 const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript" };
 
 const server = http.createServer(async (request, response) => {

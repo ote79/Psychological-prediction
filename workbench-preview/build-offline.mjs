@@ -7,7 +7,7 @@ const destination = path.join(path.dirname(sourceDirectory), "交付包", "观�
 const sourceOutput = path.join(destination, "源码");
 fs.mkdirSync(sourceOutput, { recursive: true });
 const read = name => fs.readFileSync(path.join(sourceDirectory, name), "utf8");
-const scriptNames = ["data.js", "three-runtime.js", "scene3d.js", "visuals.js", "app.js"];
+const scriptNames = ["data.js", "trajectories.js", "three-runtime.js", "scene3d.js", "visuals.js", "app.js"];
 const escapeScript = value => value.replace(/<\/script/gi, "<\\/script");
 let html = read("index.html").replace('  <link rel="stylesheet" href="ui.css">', "<style>\n" + read("ui.css") + "\n</style>");
 html = html.replace(/  <script defer src="[^"]+"><\/script>\r?\n/g, "");
