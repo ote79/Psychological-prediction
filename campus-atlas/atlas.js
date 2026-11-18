@@ -33,7 +33,7 @@ const sources = {
   device:['设备交互','设备解锁频次及在学习、居住地点的解锁时长用于描述不同场景中的设备使用。']
 };
 const state = {zone:-1,group:'all',hourBin:-1,first:1,last:56,area:null,areaMode:false,person:-1,event:-1,panel:'filters',sideOpen:true,search:''};
-let map, visible=[], timer, brushing, studentPool=[], stats;
+let map, visible=[], timer, brushing, studentPool=[], stats, lastMapHash='', pendingObservation=null;
 const durationNames=['不足 2 小时','2 至不足 4 小时','4 至不足 6 小时','6 至不足 8 小时','8 至不足 10 小时','10 至不足 12 小时','12 至不足 14 小时','14 至不足 16 小时','16 至不足 18 小时','18 至不足 20 小时','20 至不足 22 小时','22 小时及以上'];
 const durationBin=h=>Math.min(11,Math.floor(h/2));
 function clearSelection(){state.person=-1;state.event=-1;if(state.panel==='profile')state.panel='filters';}
@@ -74,8 +74,7 @@ function dialog(title,body){
   if(!$('dialog').open)$('dialog').showModal();
 }
 function showMethod(key){
-  const [title,description,fact]=methods[key];
-  dialog(title,`<p>${description}</p><div class="method-fact">${fact}</div><button class="dialog-cta" data-go="all">打开校园行为地图 ↗</button>`);
+  window.Workbench.openMethod(key);
 }
 function showSource(key){
   const [title,description]=sources[key];
@@ -107,15 +106,32 @@ function gotoMap(z='all'){
 function route(){
   const parts=location.hash.slice(1).split('/');
   const active=parts[0]==='map';
-  $('workspace').hidden=!active;$('home').hidden=active;
-  document.title=active?'校园行为地图 · 观微':'观微 · 多通道校园行为研究';
-  document.body.style.background=active?'#20262c':'white';
+  const workbenchActive=window.Workbench.route();
+  const observationActive=window.ObservationView.route();
+  const extended=workbenchActive||observationActive;
+  $('workspace').hidden=!active;$('home').hidden=active||extended;
   if($('dialog').open)$('dialog').close();
   stop();
+  if(extended)return;
+  document.title=active?'校园行为地图 · 观微':'观微 · 多通道校园行为研究';
+  document.body.style.background=active?'#20262c':'white';
   if(!active)return;
-  resetFilters();state.zone=zones.indexOf(parts[1]);state.panel=parts[1]==='students'?'students':'filters';state.search='';
-  state.sideOpen=!matchMedia('(max-width:650px)').matches || state.panel==='students';
-  ensureMap();render();map.resize();map.fit();
+  const restore=map && location.hash===lastMapHash && !pendingObservation;
+  if(!restore){
+    resetFilters();state.zone=zones.indexOf(parts[1]);state.panel=parts[1]==='students'?'students':'filters';state.search='';
+    state.sideOpen=!matchMedia('(max-width:650px)').matches || state.panel==='students';
+    if(parts[1]==='student'){
+      const person=students.findIndex(s=>s.id===parts[2]);
+      if(person>=0){state.person=person;state.panel='profile';state.sideOpen=true;state.event=events.findIndex(e=>e[0]===person&&e[1]===1&&e[2]===1);}
+    }
+  }
+  if(pendingObservation){
+    const p=pendingObservation;state.first=p.first;state.last=p.last;state.zone=p.zone;state.group=p.group;
+    if(p.id){state.person=students.findIndex(s=>s.id===p.id);state.panel='profile';state.sideOpen=true;state.event=events.findIndex(e=>e[0]===state.person&&e[1]>=p.first&&e[1]<=p.last&&(p.zone<0||e[2]===p.zone));}
+    pendingObservation=null;
+  }
+  lastMapHash=location.hash;
+  ensureMap();render();map.resize();if(!restore)map.fit();
   if(state.panel==='students')$('studentSearch').focus();
 }
 function renderTimeline(){
@@ -157,6 +173,8 @@ function profilePanel(){
   ${record?`<section class="profile-card"><h3>选中驻留记录</h3><div class="detail-datum"><span>观察日 / 地点</span><b>${dayLabel(record[1])} · ${zoneNames[record[2]]}</b></div><div class="detail-datum"><span>当日驻留时长</span><b>${record[3].toFixed(3)} h</b></div></section>`:''}
   <section class="profile-card"><h3>五类地点驻留占比</h3><div class="zone-list">${total.map((v,i)=>`<div class="detail-datum"><span>${zoneNames[i]}</span><b>${sum?(100*v/sum).toFixed(1)+'%':'—'}</b></div>`).join('')}</div></section>
   <section class="profile-card"><h3>56 天行为摘要</h3>${summary.map(([name,value,unit])=>`<div class="detail-datum"><span>${name}</span><b>${value==null?'未记录':value+' '+unit}</b></div>`).join('')}</section>
+  <a class="panel-btn" href="#observations/${s.id}">查看时间图与驻留构成 ↗</a>
+  <button class="panel-btn profile-method" data-channel="quality">这个分数怎样得到？ ↗</button>
   <details><summary class="side-section">当前范围内的驻留记录 · ${recent.length} 条</summary>${recent.map(i=>`<button class="record-btn" data-record="${i}">${dayLabel(events[i][1])} · ${zoneNames[events[i][2]]}<span>${events[i][3].toFixed(2)} h</span></button>`).join('')}</details>`;
 }
 function render(){
@@ -248,6 +266,12 @@ track.addEventListener('pointermove',e=>{
 });
 for(const name of ['pointerup','pointercancel'])track.addEventListener(name,()=>brushing=null);
 track.addEventListener('dblclick',()=>setDays(1,56));
+window.AtlasNavigation={
+  openObservation(scope){pendingObservation=scope;const hash='#map/observations';if(location.hash===hash)route();else location.hash=hash;},
+  openStudent(id){const hash='#map/student/'+id;if(location.hash===hash)route();else location.hash=hash;},
+  context(){return {student:state.person>=0?students[state.person]:null,event:state.event>=0?events[state.event]:null};},
+  resume(){location.hash=lastMapHash||'#map';}
+};
 window.addEventListener('hashchange',route);
 route();
 })();
