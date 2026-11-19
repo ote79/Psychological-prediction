@@ -69,7 +69,7 @@ function render(){
  calculate();const s=students[state.person],matchingStudents=students.filter((p,i)=>(state.person<0||state.person===i)&&(state.group==='all'||p.high===(state.group==='high'))).length;
  $('obsTitle').textContent=s?s.id+' · 驻留观测与时间构成':'校园驻留观测与时间构成';
  $('obsSummary').textContent=`当前展示 ${matchingStudents} 名候选学生中的 ${people.size} 人，共 ${num(rows.length)} 条驻留记录 · ${day(state.first)}–${day(state.last)}`;
- $('obsScope').textContent=s?`匿名学生 ${s.id} · 全观察窗有效采集 ${s.sensingDays} 天 · 融合筛查分数 ${s.score.toFixed(3)}`:'每条记录表示一名学生在一个观察日、一类地点的累计驻留。上下图共享日期范围。';
+ $('obsScope').textContent=s?`匿名学生 ${s.id} · 全观察窗有效采集 ${s.sensingDays} 天 · 自适应门控预警分 ${s.score.toFixed(3)}`:'每条记录表示一名学生在一个观察日、一类地点的累计驻留。上下图共享日期范围。';
  $('obsEmpty').innerHTML=rows.length?'':'<p class="obs-empty">当前条件下没有有效驻留记录。可恢复完整观察窗，或查看该生已有的分数与采集覆盖。</p>';
  $('obsFirst').value=state.first;$('obsLast').value=state.last;$('obsStartRange').value=state.first;$('obsEndRange').value=state.last;$('obsStudent').value=state.person;$('obsGroup').value=state.group;
  $('obsCountsChart').innerHTML=countsChart();$('obsOverviewChart').innerHTML=overviewChart();$('obsCompositionChart').innerHTML=compositionChart();$('obsTreeChart').innerHTML=treeChart();selection();

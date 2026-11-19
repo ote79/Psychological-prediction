@@ -256,8 +256,8 @@
     chartInset(43,377,168,"COHORT / 研究队列",[["学生","209 人"],["观察窗口","56 天"],["驻留记录","23,341 条"],["功能区","5 类"]]) +
     chartInset(1271,379,166,"SAMPLING / 驻留记录",[["居住地点","9,565"],["学习地点","5,627"],["餐饮地点","5,297"]]) +
     sourceWires +
-    control("channel","quality","查看质量加权融合",layerRow(542,"数据覆盖与质量加权融合    ↗","#79a9e7","#9ab8a9",true)) +
-    layerRow(566,"有效观测天数   ·   感知覆盖   ·   学生级折外筛查分数","#b5a6dc","#a0b9ab",false) +
+    control("channel","quality","查看自适应门控研判",layerRow(542,"CA-Gate 2.0 空间锚定自适应门控研判    ↗","#79a9e7","#9ab8a9",true)) +
+    layerRow(566,"空间主干锚定   ·   双向动态门控   ·   多模态残差协同研判","#b5a6dc","#a0b9ab",false) +
     layerRow(590,"CES  /  COLLEGE EXPERIENCE DATASET","#a8bcd2","#a8bcd2",false) +
     sourceStation(sourceXs[0],"location","地点与驻留","LOCATION",blue,["居住时长","学习时长","餐饮时长","社交时长","休闲时长","到访地点数"]) +
     sourceStation(sourceXs[1],"sleep","睡眠与夜间作息","SLEEP & RHYTHM","#b295db",["睡眠时长","入睡时间","醒来时间","夜间解锁","解锁时长","解锁次数"]) +
