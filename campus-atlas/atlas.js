@@ -21,16 +21,16 @@ const iconPaths = {
 function icon(name){return `<svg aria-hidden="true" viewBox="0 0 24 24">${iconPaths[name]}</svg>`;}
 document.querySelectorAll('[data-icon]').forEach(el => el.innerHTML=icon(el.dataset.icon));
 const methods = {
-  rhythm:['行为与节律通道 (昼夜生理稳态表征)','无感采集睡眠窗口、深夜唤醒、运动模式与日常设备交互均值。通过时序周期对齐，提炼生物节律稳态与夜间心理唤醒指征。','在 CA-Gate 2.0 框架下与隐因子通道联合构成辅助研判通路（f_aux），在空间主干置信度处于模糊过渡带时注入节律残差协同研判。'],
-  spatial:['空间驻留与环境熵通道 (空间退缩黄金锚点)','将五类功能区驻留转为占比并计算香农信息熵，精准刻画活动足迹多样性与向心收缩。单通道独立评测 ROC-AUC 高达 0.632 ± 0.079。','作为 CA-Gate 2.0 的核心基准锚点（f_space），提供最高信噪比的先验置信度。极高危样本由空间信号直接锁定，彻底杜绝弱特征稀释。'],
-  latent:['行为隐因子通道 (TruncatedSVD 4维正交表征)','对20+项日常行为指标（睡眠节律、夜间解锁、移动时长、各场景屏幕交互等）在训练折内标准化后进行截断奇异值分解，提取4个相互正交的低秩隐因子：身心活力、昼夜节律漂移、场景回避沉溺与位移离散度。','在独立 50 折交叉验证中，单隐因子通道独立判别力达 ROC-AUC 0.581 ± 0.075。在 CA-Gate 2.0 中作为辅助表征通路（f_aux），在空间主干置信度处于模糊过渡带时注入全局行为残差协同研判。'],
-  quality:['空间锚定自适应门控 (CA-Gate 2.0)','以高信噪比空间通道为基准锚点，通过双向置信度门控动态路由：极高危与极低危严格屏蔽弱模态方差，模糊过渡带激活残差增量研判。','严格 50 折独立验证下 ROC-AUC 达到 0.618~0.631，Macro-F1 达到 0.572（超越空间单通道 0.571），危机召回率达 64.2%，彻底解决多模态特征稀释难题。']
+  rhythm:['行为与节律通道 (昼夜生理稳态表征)','无感采集睡眠窗口、深夜唤醒、运动模式与日常设备交互均值。通过时序周期对齐，提炼生物节律稳态与夜间心理唤醒指征。','在 CA-Gate 2.0 框架下与隐因子通道联合构成辅助研判通路（f_aux），在空间主干置信度处于模糊过渡带时注入节律残差协同研判'],
+  spatial:['空间驻留与环境熵通道 (空间退缩黄金锚点)','将五类功能区驻留转为占比并计算香农信息熵，精准刻画活动足迹多样性与向心收缩。单通道独立评测 ROC-AUC 高达 0.632 ± 0.079。','作为 CA-Gate 2.0 的核心基准锚点（f_space），提供最高信噪比的先验置信度，极高危样本由空间信号直接锁定，彻底杜绝弱特征稀释'],
+  latent:['行为隐因子通道 (TruncatedSVD 4维正交表征)','对20+项日常行为指标（睡眠节律、夜间解锁、移动时长、各场景屏幕交互等）在训练折内标准化后进行截断奇异值分解，提取4个相互正交的低秩隐因子：身心活力、昼夜节律漂移、场景回避沉溺与位移离散度。','在独立 50 折交叉验证中单隐因子通道独立判别力达 ROC-AUC 0.581 ± 0.075，在 CA-Gate 2.0 中作为辅助表征通路（f_aux），在空间主干置信度处于模糊过渡带时注入全局行为残差协同研判'],
+  quality:['空间锚定自适应门控 (CA-Gate 2.0)','以高信噪比空间通道为基准锚点，通过双向置信度门控动态路由：极高危与极低危严格屏蔽弱模态方差，模糊过渡带激活残差增量研判。','严格 50 折独立验证下 ROC-AUC 达到 0.618~0.631，Macro-F1 达到 0.572（超越空间单通道 0.571），危机召回率达 64.2%，彻底解决多模态特征稀释难题']
 };
 const sources = {
-  location:['地点驻留','按日汇总居住、学习、餐饮、社交和休闲地点的驻留时长。各区域的时长及其占比进入空间表征。'],
-  sleep:['睡眠与夜间活动','观察期内的平均睡眠时长、夜间解锁次数和解锁时长用于描述作息节律。'],
-  activity:['移动活动','静止、步行、乘车和骑行的时长均值用于描述日常活动构成。'],
-  device:['设备交互','设备解锁频次及在学习、居住地点的解锁时长用于描述不同场景中的设备使用。']
+  location:['地点驻留','按日汇总居住、学习、餐饮、社交和休闲地点的驻留时长，各区域的时长及其占比进入空间表征'],
+  sleep:['睡眠与夜间活动','观察期内的平均睡眠时长、夜间解锁次数和解锁时长用于描述作息节律'],
+  activity:['移动活动','静止、步行、乘车和骑行的时长均值用于描述日常活动构成'],
+  device:['设备交互','设备解锁频次及在学习、居住地点的解锁时长用于描述不同场景中的设备使用']
 };
 const state = {zone:-1,group:'all',hourBin:-1,first:1,last:56,area:null,areaMode:false,person:-1,event:-1,panel:'filters',sideOpen:true,search:''};
 let map, visible=[], timer, brushing, studentPool=[], stats, lastMapHash='', pendingObservation=null;
@@ -81,10 +81,10 @@ function showSource(key){
   dialog(title,`<p>${description}</p><button class="dialog-cta" data-channel="${key==='location'?'spatial':'rhythm'}">查看对应研究通道 →</button>`);
 }
 function showMethods(){
-  dialog('研究方法与数据',`<p>观微使用 CES 队列最初 56 天的行为观测，研究随后 56 天内的 PHQ-4 筛查结果。</p><div class="method-list">${Object.entries(methods).map(([k,v])=>`<button data-channel="${k}">${v[0]} <span>↗</span></button>`).join('')}</div>`);
+  dialog('研究方法与数据',`<p>依托 56 天连续被动感知时序，实现多模态自适应协同研判</p><div class="method-list">${Object.entries(methods).map(([k,v])=>`<button data-channel="${k}">${v[0]} <span>↗</span></button>`).join('')}</div>`);
 }
 function showMapInfo(){
-  dialog('校园行为地图',`<p>每个点代表一名学生在一个观察日、一个功能区的有效驻留记录。五片点群对应五类地点，区内点位按观察日和匿名学生序号排布。</p><p>金色表示常规与中分组记录，紫色表示融合筛查分数达到 0.70 的展示组。点选记录可查看该生日均行为、观察覆盖及筛查分数。</p><div class="method-fact">模型队列 209 人，其中 206 人有五类地点驻留数据。观察窗共 23,341 条驻留记录，高分组占 1,067 条。</div>`);
+  dialog('校园行为地图',`<p>每个点代表一名学生在一个观察日、一个功能区的有效驻留记录，五片点群对应五类核心地点</p><p>点选记录可下钻查看该生多维行为、采集覆盖及自适应预警分</p><div class="method-fact">模型队列 209 人，其中 206 人具备五类地点驻留数据，观察窗共 23,341 条驻留记录，重点关注组占 1,067 条</div>`);
 }
 function stop(){clearInterval(timer);timer=null;$('play').innerHTML=icon('play');$('play').setAttribute('aria-label','按日播放');$('play').title='按日播放';}
 function setDays(a,b){

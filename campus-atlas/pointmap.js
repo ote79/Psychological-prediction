@@ -82,7 +82,7 @@
     canvas.style.touchAction = 'none';
     canvas.style.cursor = 'grab';
     if (!canvas.hasAttribute('aria-label')) {
-      canvas.setAttribute('aria-label', '五类校园功能区驻留点图。点位按观察日和匿名学生排列。');
+      canvas.setAttribute('aria-label', '五类校园功能区驻留点图，点位按观察日和学生序号排列');
     }
 
     const projectX = x => (x - view.x) * width * view.zoom + width / 2;
