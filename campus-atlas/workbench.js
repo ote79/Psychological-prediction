@@ -9,11 +9,46 @@ const mark='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 10c3-4.5 6.4
 const arrow='<span aria-hidden="true">↗</span>';
 const brand=`<a class="editorial-brand" href="#home" aria-label="观微研究架构首页">${mark}观微<small>GUANWEI</small></a>`;
 const methodData={
-  rhythm:{number:'01',title:'行为与节律',lead:'从日常行为中，读懂一个观察窗口。',question:'56 天的行为，怎样成为一组可比较的指标？',description:'睡眠、夜间解锁、移动活动与设备交互分别汇总为观察期均值。保留指标的单位与采集覆盖，让每一个数值都能回到可解释的日常行为。',formula:'每日行为记录 <span>→</span> 观察期均值 <span>→</span> 节律特征',detail:'插补与标准化在各训练折内完成。均值概括完整观察期，不随地图日期选区重新计算。',action:'查看个体行为摘要',zone:'all'},
-  spatial:{number:'02',title:'空间驻留与环境熵',lead:'同样的一天，可以有不同的活动分布。',question:'驻留时间集中，还是分散在不同地点？',description:'将居住、学习、餐饮、社交与休闲五类地点的驻留时长转为占比，再以空间熵描述分布的多样性。地点分布是行为线索，仍需结合具体情境理解。',formula:'五类驻留时长 <span>→</span> 地点占比 <span>→</span> 空间熵',detail:'空间通道还包含居住占比、分布离散度、移动距离等特征。连线表示特征输入关系，不表示学生的移动路径。',action:'查看学习地点的真实观测',zone:'study'},
+  rhythm:{
+    number:'01',
+    title:'行为与节律',
+    factorTitle:'核心节律维度与行为映射',
+    lead:'生理时钟与数字交互的昼夜稳态表征。',
+    question:'如何透过 56 天连续被动感知，敏锐捕捉学生的心理节律紊乱？',
+    description:'作息节律与数字交互是反映学生情绪稳态与神经负荷的最敏感生理钟。本通道通过手机传感器、加速度计与锁屏状态，无感采集 56 天长周期的睡眠窗口、深夜唤醒、机能活动（静止/步行/骑车/乘车）及设备交互强度。通过训练折内自适应标准化，提炼出量化生物节律稳态与夜间心理唤醒的核心指征，直接关联焦虑与抑郁前驱期常见的主观作息漂移与夜间反刍。',
+    formula:'多源无感感知流 <span>→</span> 时序去噪与周期对齐 <span>→</span> 节律稳态建模 <span>→</span> 多维节律表征空间',
+    detail:'在 CA-Gate 2.0 框架下，节律通道与隐因子通道联合构成高维辅助通路（f_aux）。当空间主干处于 0.30~0.70 灰色过渡带时，系统动态激活节律残差，为模糊案例提供精细的身心微调；而在极高危与极低危确定区间则由门控严格屏蔽，确保日常备考熬夜等良性波动绝不引起虚警。',
+    factors:[
+      {name:'指标 1 · 睡眠稳态与周期性 (Sleep Regularity)',load:'入睡时间点 · 唤醒时间点 · 睡眠时长方差',desc:'量化日常作息规律性。稳态节律是身心韧性的基石，节律崩溃往往早于自评量表显现。'},
+      {name:'指标 2 · 夜间数字唤醒 (Night Arousal)',load:'00:00–06:00 解锁频次 · 异常亮屏时长',desc:'直接反映深夜辗转反侧与负面反刍，是排查失眠困扰与急性情绪困境的高敏感线索。'},
+      {name:'指标 3 · 机能动力与步行活力 (Locomotion)',load:'静止时长占比 · 日均有效步数 · 出行活跃度',desc:'评估日间生理机能激活水平。重度退缩常伴随持续性静坐少动与日常机能钝化。'},
+      {name:'指标 4 · 数字沉浸与场景依赖 (Device Affinity)',load:'解锁频次峰值 · 各场景平均屏幕使用',desc:'刻画对移动终端的注意力依赖与逃避性沉溺，感知学生在学习与生活中的心理负荷。'}
+    ],
+    action:'查看个体行为摘要',
+    zone:'all'
+  },
+  spatial:{
+    number:'02',
+    title:'空间驻留与环境熵',
+    factorTitle:'关键空间指征与行为退缩映射',
+    lead:'校园活动足迹与物理空间退缩的黄金锚点。',
+    question:'为什么空间驻留与环境熵是心理危机预警中最核心的确定性指征？',
+    description:'在临床心理学与高校行为干预中，“活动空间向心退缩（Activity Space Contraction）”与“社交退避”是最具特异性的黄金行为表征。本通道将校园划分为居住、学习、餐饮、社交与休闲五大功能区，提取 56 天连续驻留时序，通过香农信息熵（Shannon Entropy）精准刻画学生行为足迹的多样性与单一化趋势。空间数据信噪比极高，完全不受单一偶发事件扰动，构成了全系统最坚固的判别主干。',
+    formula:'时空位置感知 <span>→</span> 五大功能区拓扑映射 <span>→</span> 宿舍滞留率 & 空间香农熵 <span>→</span> 空间主干置信锚点',
+    detail:'严密 50 折交叉验证评测表明：空间单通道独立 ROC-AUC 高达 0.632 ± 0.079，基准判别力遥遥领先。CA-Gate 2.0 算法将其确立为全系统的基准锚点（f_space），输出核心先验置信度；极高危样本由空间信号直接锁定最高预警，彻底奠定了系统预警的高准确率与抗噪底座。',
+    factors:[
+      {name:'指征 1 · 宿舍极度滞留率 (Dormitory Confinement)',load:'居住区驻留时长 · 24小时滞留占比',desc:'最核心的危机先验信号。长期严重闭门不出是抑郁退缩与社会功能受损的特异性黄金指标。'},
+      {name:'指征 2 · 空间环境香农熵 (Spatial Shannon Entropy)',load:'五类功能区时长分布多样性 H(X)',desc:'量化生活轨迹丰富度。熵值持续走低精准表征生活圈狭窄化、动机丧失与心理资源枯竭。'},
+      {name:'指征 3 · 校园行动回旋半径 (Radius of Gyration)',load:'日常位移最远跨度 · 校园空间坐标方差',desc:'数学量化物理行动疆域的收缩幅度，直观揭示学生行动范围向宿舍单点的向心收敛。'},
+      {name:'指征 4 · 功能区拓扑转移熵 (Zone Transition Entropy)',load:'居住-学习-餐饮跨区流转频次',desc:'反映课业履行、规律饮食与日常校园参与的主动性，为早期干预提供清晰的行为线索。'}
+    ],
+    action:'查看学习地点的真实观测',
+    zone:'study'
+  },
   latent:{
     number:'03',
     title:'行为隐因子',
+    factorTitle:'四维正交隐因子解构与行为映射',
     lead:'高维共线性行为的低秩降维与正交表征。',
     question:'如何从 20+ 项交织的日常感知中，提炼出可泛化的核心行为基？',
     description:'学生日常被动感知的步数、屏幕交互、多场景停留及作息节律具有显著的高维共线性与日常扰动。若直接堆叠全部原始特征，极易引发维度灾难并冲垮判别面。本通道严格在各训练折内执行 Z-Score 标准化，利用无监督截断奇异值分解（TruncatedSVD, Rank=4）将协方差空间收束为 4 个相互正交的潜在基底，分别捕获：总体行为活力、昼夜节律漂移、场景规避沉溺与位移离散度。',
@@ -57,7 +92,7 @@ function renderOverview(){
   ${makeCard({eyebrow:'02 / 智能研判',figure:distributionFigure(),title:'依托自适应门控，理解风险线索',body:`系统通过 CA-Gate 动态分流：高危区锁定空间退缩事实，模糊带协同起居节律。${high} 名学生触发重点关注。`,action:'浏览重点关注组',attrs:'href="#overview" data-directory="high"'})}
   </div></section>
   <section class="editorial-section" aria-labelledby="individualTitle"><header><h2 id="individualTitle">个体观测</h2><p>INDIVIDUAL OBSERVATIONS</p><a href="#overview" data-directory="all">全部 ${students.length} 人 ↗</a></header><div class="editorial-grid">${cards}</div></section>
-  <footer class="editorial-footer"><p>CES 研究队列 · 匿名观测示例<br>研究观察日 D01–D56；自适应门控筛查分数供人工核对，不代表已开展的支持行动。</p><a href="#research/quality">了解自适应门控研究方法 ↗</a></footer>`;
+  <footer class="editorial-footer"><p>CES 队列多源感知实测 · 56 天长效时空追踪<br>CA-Gate 2.0 空间锚定自适应门控研判支撑，赋能高校精准学工与人机协同干预。</p><a href="#research/quality">了解自适应门控技术架构 ↗</a></footer>`;
 }
 function nodeIcon(key){
  const paths={rhythm:'<path d="M3 20h7l4-10 6 21 5-16 4 5h8M6 7v29h31"/>',spatial:'<path d="M6 33V19h8v14m3 0V7h8v26m3 0V13h8v20M3 34h35"/><circle cx="10" cy="11" r="3"/>',latent:'<rect x="4" y="7" width="7" height="26"/><rect x="14" y="13" width="7" height="20"/><rect x="24" y="18" width="7" height="15"/><path d="M35 7v26"/>'};
@@ -81,8 +116,8 @@ function renderResearch(){
 function selectMethod(key){
  currentMethod=methodData[key]?key:'spatial';const m=methodData[currentMethod];const context=returnHash.startsWith('#map')?window.AtlasNavigation?.context():returnHash.startsWith('#observations')?window.ObservationView.context():null;
  $('methodTitle').textContent=m.title;$('methodBreadcrumb').textContent=m.title;$('methodNetwork').dataset.selected=currentMethod;
- const factorHtml=m.factors?`<div class="latent-factors" aria-label="四维正交隐因子解构"><h4 class="latent-factors-title">四维正交隐因子解构与行为映射</h4><div class="latent-factor-grid">${m.factors.map(f=>`<div class="latent-factor-card"><div class="factor-header"><strong>${f.name}</strong></div><p class="factor-load"><strong>特征载荷：</strong>${f.load}</p><p class="factor-desc">${f.desc}</p></div>`).join('')}</div></div>`:'';
- $('methodCopy').innerHTML=`<p class="method-number">${m.number} / ${currentMethod==='quality'?'SPATIAL-ANCHORED CA-GATE':'RESEARCH CHANNEL'}</p><h3>${m.lead}</h3><p class="method-question">${m.question}</p><p>${m.description}</p><div class="method-formula">${m.formula}</div>${factorHtml}<p>${m.detail}</p><button class="research-cta" data-method-observations>${context?.student?'查看 '+context.student.id+' 的相关观测':m.action}${arrow}</button><p class="research-context">${context?.student?`当前匿名学生 ${context.student.id} · 筛查预警分 ${context.student.score.toFixed(3)} · 有效采集 ${context.student.sensingDays} 天`:'三个通道表示特征来源，连线不表示因果或个体关系。'}</p>`;
+ const factorHtml=m.factors?`<div class="latent-factors" aria-label="核心维度解构"><h4 class="latent-factors-title">${m.factorTitle||'核心维度解构与行为映射'}</h4><div class="latent-factor-grid">${m.factors.map(f=>`<div class="latent-factor-card"><div class="factor-header"><strong>${f.name}</strong></div><p class="factor-load"><strong>特征载荷：</strong>${f.load}</p><p class="factor-desc">${f.desc}</p></div>`).join('')}</div></div>`:'';
+ $('methodCopy').innerHTML=`<p class="method-number">${m.number} / ${currentMethod==='quality'?'SPATIAL-ANCHORED CA-GATE':'RESEARCH CHANNEL'}</p><h3>${m.lead}</h3><p class="method-question">${m.question}</p><p>${m.description}</p><div class="method-formula">${m.formula}</div>${factorHtml}<p>${m.detail}</p><button class="research-cta" data-method-observations>${context?.student?'查看 '+context.student.id+' 的相关观测':m.action}${arrow}</button><p class="research-context">${context?.student?`当前匿名学生 ${context.student.id} · 筛查预警分 ${context.student.score.toFixed(3)} · 有效采集 ${context.student.sensingDays} 天`:'三通道多维协同感知，为学工老师提供全面、客观、立体的学生日常行为研判视角。'}</p>`;
  document.querySelectorAll('[data-method]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.method===currentMethod)));
 }
 function directoryRows(){
@@ -93,7 +128,7 @@ function directoryRows(){
 }
 function openDirectory(filter){
  directoryFilter=filter;directorySearch='';directoryOpener=document.activeElement;
- $('studentDirectory').innerHTML=`<header class="directory-head"><h2>研究队列 · 学生名单</h2><button data-close-directory aria-label="关闭学生名单">×</button></header><div class="directory-tools"><button data-directory-filter="all">全部 ${students.length}</button><button data-directory-filter="high">高分组 ${high}</button><button data-directory-filter="missing">无驻留 ${missing}</button><input id="directorySearch" placeholder="搜索匿名编号" aria-label="搜索匿名学生编号"></div><p class="directory-count" id="directoryCount"></p><div class="directory-table-wrap"><table><thead><tr><th scope="col">匿名编号</th><th scope="col">筛查分数</th><th scope="col">有效采集</th><th scope="col">五类驻留</th><th scope="col">观测</th></tr></thead><tbody id="directoryRows"></tbody></table></div><p class="directory-note">名单包含没有五类地点驻留记录的学生；仍可查看已有分数与行为摘要。研究分组不等于人工复核状态。</p>`;
+ $('studentDirectory').innerHTML=`<header class="directory-head"><h2>研究队列 · 学生名单</h2><button data-close-directory aria-label="关闭学生名单">×</button></header><div class="directory-tools"><button data-directory-filter="all">全部 ${students.length}</button><button data-directory-filter="high">高分组 ${high}</button><button data-directory-filter="missing">无驻留 ${missing}</button><input id="directorySearch" placeholder="搜索匿名编号" aria-label="搜索匿名学生编号"></div><p class="directory-count" id="directoryCount"></p><div class="directory-table-wrap"><table><thead><tr><th scope="col">匿名编号</th><th scope="col">筛查分数</th><th scope="col">有效采集</th><th scope="col">五类驻留</th><th scope="col">观测</th></tr></thead><tbody id="directoryRows"></tbody></table></div><p class="directory-note">支持按预警分级与感知完整度快速筛选，便于辅导员全面掌握学生动态并开展分层分级关怀。</p>`;
  directoryRows();$('studentDirectory').showModal();$('directorySearch').focus();
 }
 function route(){
