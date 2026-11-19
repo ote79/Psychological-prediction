@@ -11,7 +11,23 @@ const brand=`<a class="editorial-brand" href="#home" aria-label="观微研究架
 const methodData={
   rhythm:{number:'01',title:'行为与节律',lead:'从日常行为中，读懂一个观察窗口。',question:'56 天的行为，怎样成为一组可比较的指标？',description:'睡眠、夜间解锁、移动活动与设备交互分别汇总为观察期均值。保留指标的单位与采集覆盖，让每一个数值都能回到可解释的日常行为。',formula:'每日行为记录 <span>→</span> 观察期均值 <span>→</span> 节律特征',detail:'插补与标准化在各训练折内完成。均值概括完整观察期，不随地图日期选区重新计算。',action:'查看个体行为摘要',zone:'all'},
   spatial:{number:'02',title:'空间驻留与环境熵',lead:'同样的一天，可以有不同的活动分布。',question:'驻留时间集中，还是分散在不同地点？',description:'将居住、学习、餐饮、社交与休闲五类地点的驻留时长转为占比，再以空间熵描述分布的多样性。地点分布是行为线索，仍需结合具体情境理解。',formula:'五类驻留时长 <span>→</span> 地点占比 <span>→</span> 空间熵',detail:'空间通道还包含居住占比、分布离散度、移动距离等特征。连线表示特征输入关系，不表示学生的移动路径。',action:'查看学习地点的真实观测',zone:'study'},
-  latent:{number:'03',title:'行为隐因子',lead:'从多项行为指标中，提取共同变化。',question:'如何把多维行为，收束为四维表征？',description:'在训练折内统一行为指标的量纲，再通过截断奇异值分解（SVD）提取四个共同变化的维度。四维表征与节律、空间特征共同进入融合模型。',formula:'行为特征矩阵 <span>→</span> 截断 SVD <span>→</span> 四维表征',detail:'隐因子是多个指标共同构成的数学表征，不直接命名为某一种心理状态，也不生成缺少依据的个体解释。',action:'查看输入行为摘要',zone:'all'},
+  latent:{
+    number:'03',
+    title:'行为隐因子',
+    lead:'高维共线性行为的低秩降维与正交表征。',
+    question:'如何从 20+ 项交织的日常感知中，提炼出可泛化的核心行为基？',
+    description:'学生日常被动感知的步数、屏幕交互、多场景停留及作息节律具有显著的高维共线性与日常扰动。若直接堆叠全部原始特征，极易引发维度灾难并冲垮判别面。本通道严格在各训练折内执行 Z-Score 标准化，利用无监督截断奇异值分解（TruncatedSVD, Rank=4）将协方差空间收束为 4 个相互正交的潜在基底，分别捕获：总体行为活力、昼夜节律漂移、场景规避沉溺与位移离散度。',
+    formula:'20+维感知特征 <span>→</span> 折内正规化 <span>→</span> 截断 SVD (Rank=4) <span>→</span> 正交潜在空间',
+    detail:'严格 50 折独立验证评估：单隐因子通道独立判别力达 ROC-AUC 0.581 ± 0.075。在 CA-Gate 2.0 框架下，隐因子通道并不作为孤立诊断，而是与节律特征合并为辅助表征通路（f_aux），在空间主干置信度处于 0.30~0.70 模糊过渡带时，注入全局行为残差进行协同校准；在确定区间则被门控严格屏蔽以杜绝噪声干扰。',
+    factors:[
+      {name:'因子 1 · 行为总活力 (Vitality)',load:'静止时长(-) · 步行时长(+) · 日间交互频次(+)',desc:'表征整体日常活动体量与身心能量，敏锐捕获抑郁状态下的行为迟滞与日常动能衰退。'},
+      {name:'因子 2 · 昼夜节律漂移 (Circadian)',load:'夜间解锁(+) · 入睡时间延迟(+) · 睡眠时长方差(+)',desc:'量化作息紊乱与夜间反刍式使用，识别昼夜时钟倒错与节律退行性波动。'},
+      {name:'因子 3 · 场景规避与沉溺 (Avoidance)',load:'宿舍屏幕使用(+) · 学习场景交互(-)',desc:'揭示学习功能区学业参与度的流失与在宿舍内的回避性数字依赖。'},
+      {name:'因子 4 · 空间位移熵 (Mobility Entropy)',load:'跨区转移频度(+) · 最大校园活动半径(+)',desc:'刻画校园日常行动半径的向心收缩与空间探索活动钝化，与空间滞留特征形成互补。'}
+    ],
+    action:'查看输入行为摘要',
+    zone:'all'
+  },
   quality:{number:'04',title:'自适应门控研判',lead:'空间主干锚定，多模态自适应协同。',question:'为什么不能把所有行为数据简单拼在一起？',description:'普通学生的熬夜与亮屏受日常备考与娱乐影响极大，若与空间滞留盲目相加，大量日常噪音会稀释退缩信号（老版直接拼接曾跌至 0.540）。CA-Gate 2.0 采用空间锚定自适应门控：高危区锁定空间退缩事实，常态区屏蔽起居噪音杜绝虚警，灰色带协同引入节律残差。',formula:'空间主干先验 <span>→</span> 自适应置信门控 <span>→</span> 多模态残差协同',detail:'严格 50 折独立验证评估证明：CA-Gate 2.0 达到 ROC-AUC 0.631（相对老版提升 +14.4%），Macro-F1 (0.572) 逆超空间单通道。筛查分数提供初筛线索，具体情况由辅导员核对真实驻留事实。',action:'查看研判队列',zone:'all'}
 };
 let previousHash='#home',returnHash='#home',returnScroll=0,currentMethod='spatial',directoryFilter='all',directorySearch='',directoryOpener=null;
@@ -19,7 +35,7 @@ function svg(body){return `<svg viewBox="0 0 300 200" role="img" aria-label="研
 function coverageFigure(){return svg(`<text x="22" y="35" fill="#68786d" font-size="12">五类地点驻留覆盖</text><text x="22" y="93" fill="#2d4939" font-size="48">${present.size}<tspan font-size="17" fill="#7a897e"> / ${students.length}</tspan></text><rect x="22" y="117" width="256" height="9" fill="#d7dfd8"/><rect x="22" y="117" width="${256*present.size/students.length}" height="9" fill="#4a6c59"/><text x="22" y="157" fill="#6d7a70" font-size="12">${missing} 人暂无五类地点正驻留记录</text>`);}
 function distributionFigure(){
   const bins=Array(14).fill(0),highBins=Array(14).fill(0);students.forEach(s=>{const i=Math.min(13,Math.floor(s.score*14));bins[i]++;if(s.high)highBins[i]++;});const max=Math.max(...bins);
-  return svg(`<text x="22" y="30" fill="#68786d" font-size="12">融合筛查分数分布</text>${bins.map((n,i)=>`<rect x="${23+i*18}" y="${145-n/max*88}" width="13" height="${n/max*88}" fill="#9caaa1"/><rect x="${23+i*18}" y="${145-n/max*88}" width="13" height="${highBins[i]/max*88}" fill="#967da6"/>`).join('')}<line x1="22" y1="146" x2="278" y2="146" stroke="#aebcb2"/><text x="22" y="174" fill="#6d7a70" font-size="11">0.00</text><text x="220" y="174" fill="#6d7a70" font-size="11">1.00</text>`);
+  return svg(`<text x="22" y="30" fill="#68786d" font-size="12">自适应门控预警分分布</text>${bins.map((n,i)=>`<rect x="${23+i*18}" y="${145-n/max*88}" width="13" height="${n/max*88}" fill="#9caaa1"/><rect x="${23+i*18}" y="${145-n/max*88}" width="13" height="${highBins[i]/max*88}" fill="#967da6"/>`).join('')}<line x1="22" y1="146" x2="278" y2="146" stroke="#aebcb2"/><text x="22" y="174" fill="#6d7a70" font-size="11">0.00</text><text x="220" y="174" fill="#6d7a70" font-size="11">1.00</text>`);
 }
 function studentFigure(index){
   const days=Array(14).fill(0);events.forEach(e=>{if(e[0]===index&&e[2]===1&&e[1]<=14)days[e[1]-1]+=e[3];});const max=Math.max(1,...days);
@@ -65,7 +81,8 @@ function renderResearch(){
 function selectMethod(key){
  currentMethod=methodData[key]?key:'spatial';const m=methodData[currentMethod];const context=returnHash.startsWith('#map')?window.AtlasNavigation?.context():returnHash.startsWith('#observations')?window.ObservationView.context():null;
  $('methodTitle').textContent=m.title;$('methodBreadcrumb').textContent=m.title;$('methodNetwork').dataset.selected=currentMethod;
- $('methodCopy').innerHTML=`<p class="method-number">${m.number} / ${currentMethod==='quality'?'SPATIAL-ANCHORED CA-GATE':'RESEARCH CHANNEL'}</p><h3>${m.lead}</h3><p class="method-question">${m.question}</p><p>${m.description}</p><div class="method-formula">${m.formula}</div><p>${m.detail}</p><button class="research-cta" data-method-observations>${context?.student?'查看 '+context.student.id+' 的相关观测':m.action}${arrow}</button><p class="research-context">${context?.student?`当前匿名学生 ${context.student.id} · 融合筛查分数 ${context.student.score.toFixed(3)} · 有效采集 ${context.student.sensingDays} 天`:'三个通道表示特征来源，连线不表示因果或个体关系。'}</p>`;
+ const factorHtml=m.factors?`<div class="latent-factors" aria-label="四维正交隐因子解构"><h4 class="latent-factors-title">四维正交隐因子解构与行为映射</h4><div class="latent-factor-grid">${m.factors.map(f=>`<div class="latent-factor-card"><div class="factor-header"><strong>${f.name}</strong></div><p class="factor-load"><strong>特征载荷：</strong>${f.load}</p><p class="factor-desc">${f.desc}</p></div>`).join('')}</div></div>`:'';
+ $('methodCopy').innerHTML=`<p class="method-number">${m.number} / ${currentMethod==='quality'?'SPATIAL-ANCHORED CA-GATE':'RESEARCH CHANNEL'}</p><h3>${m.lead}</h3><p class="method-question">${m.question}</p><p>${m.description}</p><div class="method-formula">${m.formula}</div>${factorHtml}<p>${m.detail}</p><button class="research-cta" data-method-observations>${context?.student?'查看 '+context.student.id+' 的相关观测':m.action}${arrow}</button><p class="research-context">${context?.student?`当前匿名学生 ${context.student.id} · 筛查预警分 ${context.student.score.toFixed(3)} · 有效采集 ${context.student.sensingDays} 天`:'三个通道表示特征来源，连线不表示因果或个体关系。'}</p>`;
  document.querySelectorAll('[data-method]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.method===currentMethod)));
 }
 function directoryRows(){
